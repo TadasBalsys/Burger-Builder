@@ -1,5 +1,7 @@
 import React from 'react';
 
+import Styles from './Layout.module.css';
+
 interface LayoutProps {
   children: JSX.Element
 }
@@ -7,7 +9,7 @@ interface LayoutProps {
 const layout: React.FC<LayoutProps> = (props): JSX.Element => (
   <>
     <div>Toolbar, SideDrawer, BackDrop</div>
-    <main>{props.children}</main>
+    <main className={Styles.Content}>{props.children}</main>
   </>
 );
 
