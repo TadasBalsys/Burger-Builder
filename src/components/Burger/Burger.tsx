@@ -32,7 +32,7 @@ const burger: React.FC<BurgerProps> = (props) => {
       );
     }
   );
-    
+
   const ingElemLength: number = ingredientElements.flat().length;
   const isBurgerNotEmpty: Boolean = Boolean(ingElemLength);
 
