@@ -5,6 +5,7 @@ import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 
 interface BurgerBuilderState {
   ingredients: Ingredients;
+  isPurchasable: boolean;
   totalPrice: number;
 }
 
@@ -23,6 +24,7 @@ class BurgerBuilder extends Component<{}, BurgerBuilderState> {
       cheese: 0,
       meat: 0,
     },
+    isPurchasable: false,
     totalPrice: 0,
   };
 
@@ -34,10 +36,13 @@ class BurgerBuilder extends Component<{}, BurgerBuilderState> {
     updatedIngredients[type as keyof Ingredients] = oldCount + 1;
     const priceAddition: number = IngredientsPrices[type as keyof Ingredients];
     const newPrice: number = this.state.totalPrice + priceAddition;
-    return this.setState({
-      totalPrice: newPrice,
-      ingredients: updatedIngredients,
-    });
+    return this.setState(
+      () => ({
+        totalPrice: newPrice,
+        ingredients: updatedIngredients,
+      }),
+      () => this.updatePurchaseState()
+    );
   };
 
   removeIngredientHandler = (type: string): void => {
@@ -49,10 +54,27 @@ class BurgerBuilder extends Component<{}, BurgerBuilderState> {
     updatedIngredients[type as keyof Ingredients] = oldCount - 1; // This ONE
     const priceAddition: number = IngredientsPrices[type as keyof Ingredients];
     const newPrice: number = this.state.totalPrice - priceAddition; // This One
-    return this.setState({
-      totalPrice: newPrice,
-      ingredients: updatedIngredients,
-    });
+    return this.setState(
+      () => ({
+        totalPrice: newPrice,
+        ingredients: updatedIngredients,
+      }),
+      () => this.updatePurchaseState()
+    );
+  };
+
+  updatePurchaseState = () => {
+    const ingredients = {
+      ...this.state.ingredients,
+    };
+    const sum = Object.keys(ingredients)
+      .map((ingredient) => {
+        return ingredients[ingredient as keyof Ingredients];
+      })
+      .reduce((sum, el) => {
+        return sum + el;
+      }, 0);
+    return this.setState({ isPurchasable: sum > 0 });
   };
 
   render() {
@@ -76,6 +98,7 @@ class BurgerBuilder extends Component<{}, BurgerBuilderState> {
           ingredientsRemoved={this.removeIngredientHandler}
           price={this.state.totalPrice}
           disableInfo={isDisable}
+          isPurchasable={this.state.isPurchasable}
         />
       </>
     );

@@ -5,6 +5,7 @@ import styles from './BuildControls.module.css';
 
 interface BuildControlProps {
   price: number;
+  isPurchasable: boolean;
   disableInfo: { [x: string]: boolean };
   ingredientsAdded: Function;
   ingredientsRemoved: Function;
@@ -29,31 +30,43 @@ const controls: control[] = [
   { label: 'Meat', type: 'meat' },
 ];
 
-const buildControls: React.FC<BuildControlProps> = ({
-  price,
-  disableInfo,
-  ingredientsAdded,
-  ingredientsRemoved,
-}): JSX.Element => (
-  <div className={styles.BuildControls}>
-    <p>
-      Current Price: <strong>{price.toFixed(2)}</strong>
-    </p>
-    {controls.map(
-      (control: control): JSX.Element => {
-        const { label, type } = control;
-        return (
-          <BuildControl
-            key={label}
-            label={label}
-            add={() => ingredientsAdded(type)}
-            remove={() => ingredientsRemoved(type)}
-            disable={disableInfo[type as keyof isIngredientDisable]}
-          />
-        );
-      }
-    )}
-  </div>
-);
+const buildControls: React.FC<BuildControlProps> = (props): JSX.Element => {
+  const {
+    price,
+    isPurchasable,
+    disableInfo,
+    ingredientsAdded,
+    ingredientsRemoved,
+  } = props;
+
+  return (
+    <div className={styles.BuildControls}>
+      <p>
+        Current Price: <strong>{price.toFixed(2)}</strong>
+      </p>
+      {controls.map(
+        (control: control): JSX.Element => {
+          const { label, type } = control;
+          return (
+            <BuildControl
+              key={label}
+              label={label}
+              add={() => ingredientsAdded(type)}
+              remove={() => ingredientsRemoved(type)}
+              disable={disableInfo[type as keyof isIngredientDisable]}
+            />
+          );
+        }
+      )}
+      <button
+        className={styles.OrderButton}
+        disabled={!isPurchasable}
+        onClick={() => alert('order now')}
+      >
+        ORDER NOW
+      </button>
+    </div>
+  );
+};
 
 export default buildControls;
