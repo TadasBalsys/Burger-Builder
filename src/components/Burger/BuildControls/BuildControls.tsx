@@ -4,8 +4,16 @@ import BuildControl from './BuildControl/BuildControl';
 import styles from './BuildControls.module.css';
 
 interface BuildControlProps {
+  disableInfo: { [x: string]: boolean };
   ingredientsAdded: Function;
   ingredientsRemoved: Function;
+}
+
+interface isIngredientDisable {
+  salad: boolean;
+  cheese: boolean;
+  meat: boolean;
+  bacon: boolean;
 }
 
 type control = {
@@ -21,18 +29,21 @@ const controls: control[] = [
 ];
 
 const buildControls: React.FC<BuildControlProps> = ({
+  disableInfo,
   ingredientsAdded,
   ingredientsRemoved,
 }): JSX.Element => (
   <div className={styles.BuildControls}>
     {controls.map(
       (control: control): JSX.Element => {
+        const { label, type } = control;
         return (
           <BuildControl
-            key={control.label}
-            label={control.label}
-            add={() => ingredientsAdded(control.type)}
-            remove={() => ingredientsRemoved(control.type)}
+            key={label}
+            label={label}
+            add={() => ingredientsAdded(type)}
+            remove={() => ingredientsRemoved(type)}
+            disable={disableInfo[type as keyof isIngredientDisable]}
           />
         );
       }

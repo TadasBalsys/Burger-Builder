@@ -56,12 +56,25 @@ class BurgerBuilder extends Component<{}, BurgerBuilderState> {
   };
 
   render() {
+    /*
+    Loops thru ingredients and check if there is 0 of some ingredient,
+    return boolean value, which is passed to down component three
+    to lock down 'less' button in BuildControl component "Ingredients can't be -1, etc."
+    */
+    let isDisable: { [x: string]: boolean } = {};
+    for (const key in this.state.ingredients) {
+      let booleanValue: boolean =
+        this.state.ingredients[key as keyof Ingredients] <= 0;
+      isDisable = { ...isDisable, [key]: booleanValue };
+    }
+
     return (
       <>
         <Burger ingredients={this.state.ingredients} />
         <BuildControls
           ingredientsAdded={this.addIngredientHandler}
           ingredientsRemoved={this.removeIngredientHandler}
+          disableInfo={isDisable}
         />
       </>
     );
