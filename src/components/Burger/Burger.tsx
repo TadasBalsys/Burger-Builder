@@ -8,15 +8,14 @@ interface BurgerProps {
   ingredients: Ingredients;
 }
 
-interface Ingredients {
+export interface Ingredients {
   salad: number;
   bacon: number;
   cheese: number;
   meat: number;
 }
 
-const burger: React.FC<BurgerProps> = (props) => {
-  const { ingredients } = props;
+const burger: React.FC<BurgerProps> = ({ ingredients }): JSX.Element => {
   const ingredientsNames: string[] = Object.keys(ingredients);
   /*
   Maps thru ingredientsNames array, and gets value from ingredients obj by mapped value (ingredient: string),

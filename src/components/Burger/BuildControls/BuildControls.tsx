@@ -3,6 +3,11 @@ import React from 'react';
 import BuildControl from './BuildControl/BuildControl';
 import styles from './BuildControls.module.css';
 
+interface BuildControlProps {
+  ingredientsAdded: Function;
+  ingredientsRemoved: Function;
+}
+
 type control = {
   label: string;
   type: string;
@@ -15,13 +20,22 @@ const controls: control[] = [
   { label: 'Meat', type: 'meat' },
 ];
 
-const buildControls = () => (
+const buildControls: React.FC<BuildControlProps> = ({
+  ingredientsAdded,
+  ingredientsRemoved,
+}): JSX.Element => (
   <div className={styles.BuildControls}>
     {controls.map(
-      (control: control): JSX.Element =>  { 
+      (control: control): JSX.Element => {
         return (
-        <BuildControl key={control.label} label={control.label} />
-      )}
+          <BuildControl
+            key={control.label}
+            label={control.label}
+            add={() => ingredientsAdded(control.type)}
+            remove={() => ingredientsRemoved(control.type)}
+          />
+        );
+      }
     )}
   </div>
 );
