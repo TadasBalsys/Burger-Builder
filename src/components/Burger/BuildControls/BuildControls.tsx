@@ -4,6 +4,7 @@ import BuildControl from './BuildControl/BuildControl';
 import styles from './BuildControls.module.css';
 
 interface BuildControlProps {
+  price: number;
   disableInfo: { [x: string]: boolean };
   ingredientsAdded: Function;
   ingredientsRemoved: Function;
@@ -29,11 +30,15 @@ const controls: control[] = [
 ];
 
 const buildControls: React.FC<BuildControlProps> = ({
+  price,
   disableInfo,
   ingredientsAdded,
   ingredientsRemoved,
 }): JSX.Element => (
   <div className={styles.BuildControls}>
+    <p>
+      Current Price: <strong>{price.toFixed(2)}</strong>
+    </p>
     {controls.map(
       (control: control): JSX.Element => {
         const { label, type } = control;
