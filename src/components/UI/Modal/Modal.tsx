@@ -1,0 +1,28 @@
+import React, { ReactNode } from 'react';
+
+import Backdrop from '../Backdrop/Backdrop';
+
+import styles from './Modal.module.css';
+
+interface ModalProps {
+  children: ReactNode;
+  closeModalHandler: (e: React.MouseEvent) => void;
+  show: boolean;
+}
+
+const modal: React.FC<ModalProps> = (props) => (
+  <>
+    <Backdrop show={props.show} closeHandler={props.closeModalHandler}/>
+    <div
+      className={styles.Modal}
+      style={{
+        transform: props.show ? 'translateY(0)' : 'translateY(-100vh)',
+        opacity: props.show ? '1' : '0',
+      }}
+    >
+      {props.children}
+    </div>
+  </>
+);
+
+export default modal;

@@ -2,10 +2,13 @@ import React, { Component } from 'react';
 
 import Burger, { Ingredients } from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
+import Modal from '../../components/UI/Modal/Modal';
+import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 
 interface BurgerBuilderState {
   ingredients: Ingredients;
   isPurchasable: boolean;
+  purchasing: boolean;
   totalPrice: number;
 }
 
@@ -25,6 +28,7 @@ class BurgerBuilder extends Component<{}, BurgerBuilderState> {
       meat: 0,
     },
     isPurchasable: false,
+    purchasing: false,
     totalPrice: 0,
   };
 
@@ -77,6 +81,13 @@ class BurgerBuilder extends Component<{}, BurgerBuilderState> {
     return this.setState({ isPurchasable: sum > 0 });
   };
 
+  continuePurchaseHandler = () => alert('Continue');
+
+  purchaseHandler = () =>
+    this.setState((prevState) => ({
+      purchasing: !prevState.purchasing,
+    }));
+
   render() {
     /*
     Loops thru ingredients and check if there is 0 of some ingredient,
@@ -92,6 +103,17 @@ class BurgerBuilder extends Component<{}, BurgerBuilderState> {
 
     return (
       <>
+        <Modal
+          show={this.state.purchasing}
+          closeModalHandler={this.purchaseHandler}
+        >
+          <OrderSummary
+            ingredients={this.state.ingredients}
+            totalPrice={this.state.totalPrice}
+            cancelOrder={this.purchaseHandler}
+            continueOrder={this.continuePurchaseHandler}
+          />
+        </Modal>
         <Burger ingredients={this.state.ingredients} />
         <BuildControls
           ingredientsAdded={this.addIngredientHandler}
@@ -99,6 +121,7 @@ class BurgerBuilder extends Component<{}, BurgerBuilderState> {
           price={this.state.totalPrice}
           disableInfo={isDisable}
           isPurchasable={this.state.isPurchasable}
+          purchaseHandler={this.purchaseHandler}
         />
       </>
     );

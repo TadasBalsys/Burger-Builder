@@ -9,6 +9,7 @@ interface BuildControlProps {
   disableInfo: { [x: string]: boolean };
   ingredientsAdded: Function;
   ingredientsRemoved: Function;
+  purchaseHandler: (e: React.MouseEvent) => void;
 }
 
 interface isIngredientDisable {
@@ -37,6 +38,7 @@ const buildControls: React.FC<BuildControlProps> = (props): JSX.Element => {
     disableInfo,
     ingredientsAdded,
     ingredientsRemoved,
+    purchaseHandler
   } = props;
 
   return (
@@ -61,7 +63,7 @@ const buildControls: React.FC<BuildControlProps> = (props): JSX.Element => {
       <button
         className={styles.OrderButton}
         disabled={!isPurchasable}
-        onClick={() => alert('order now')}
+        onClick={purchaseHandler}
       >
         ORDER NOW
       </button>
