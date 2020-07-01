@@ -1,6 +1,6 @@
 import React from 'react';
 
-import styles from './Backdrop.module.css';
+import classes from './Backdrop.module.css';
 
 interface BackdropProps {
   show: boolean;
@@ -8,6 +8,6 @@ interface BackdropProps {
 }
 
 const Backdrop: React.FC<BackdropProps> = ({ show, closeHandler }) =>
-  show ? <div className={styles.Backdrop} onClick={closeHandler}></div> : null;
+  show ? <div className={classes.Backdrop} onClick={closeHandler}></div> : null;
 
 export default Backdrop;

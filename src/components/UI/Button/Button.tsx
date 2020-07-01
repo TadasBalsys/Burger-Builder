@@ -1,6 +1,6 @@
 import React from 'react';
 
-import styles from './Button.module.css';
+import classes from './Button.module.css';
 
 interface ButtonProps {
   btnType: string;
@@ -14,7 +14,7 @@ const Button: React.FC<ButtonProps> = ({
   clickedHandler,
 }) => (
   <button
-    className={[styles.Button, styles[btnType]].join(' ')}
+    className={[classes.Button, classes[btnType]].join(' ')}
     onClick={clickedHandler}
   >
     {children}

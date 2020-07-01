@@ -1,6 +1,6 @@
 import React from 'react';
 
-import styles from './BuildControl.module.css';
+import classes from './BuildControl.module.css';
 
 interface BuildControlProps {
   label: string;
@@ -16,12 +16,12 @@ const buildControl: React.FC<BuildControlProps> = ({
   remove,
 }): JSX.Element => {
   return (
-    <div className={styles.BuildControl}>
-      <div className={styles.Label}>{label}</div>
-      <button className={styles.Less} onClick={remove} disabled={disable}>
+    <div className={classes.BuildControl}>
+      <div className={classes.Label}>{label}</div>
+      <button className={classes.Less} onClick={remove} disabled={disable}>
         Less
       </button>
-      <button className={styles.More} onClick={add}>
+      <button className={classes.More} onClick={add}>
         More
       </button>
     </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import styles from './NavItem.module.css';
+import classes from './NavItem.module.css';
 
 interface navItemProps {
   link: string;
@@ -9,8 +9,8 @@ interface navItemProps {
 }
 
 const navItem: React.FC<navItemProps> = ({ link, active, children }) => (
-  <li className={styles.NavItem}>
-    <a href={link} className={active ? styles.active : undefined}>
+  <li className={classes.NavItem}>
+    <a href={link} className={active ? classes.active : undefined}>
       {children}
     </a>
   </li>

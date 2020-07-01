@@ -1,7 +1,7 @@
 import React from 'react';
 
 import BuildControl from './BuildControl/BuildControl';
-import styles from './BuildControls.module.css';
+import classes from './BuildControls.module.css';
 
 interface BuildControlProps {
   price: number;
@@ -38,11 +38,11 @@ const buildControls: React.FC<BuildControlProps> = (props): JSX.Element => {
     disableInfo,
     ingredientsAdded,
     ingredientsRemoved,
-    purchaseHandler
+    purchaseHandler,
   } = props;
 
   return (
-    <div className={styles.BuildControls}>
+    <div className={classes.BuildControls}>
       <p>
         Current Price: <strong>{price.toFixed(2)}</strong>
       </p>
@@ -61,7 +61,7 @@ const buildControls: React.FC<BuildControlProps> = (props): JSX.Element => {
         }
       )}
       <button
-        className={styles.OrderButton}
+        className={classes.OrderButton}
         disabled={!isPurchasable}
         onClick={purchaseHandler}
       >

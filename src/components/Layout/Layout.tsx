@@ -1,19 +1,41 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import Toolbar from '../Navigation/Toolbar/Toolbar';
+import SideDrawer from '../Navigation/SideDrawer/SideDrawer';
 
-import Styles from './Layout.module.css';
+import classes from './Layout.module.css';
 
 interface LayoutProps {
   children: JSX.Element;
 }
 
-const layout: React.FC<LayoutProps> = (props): JSX.Element => (
-  <>
-    <Toolbar />
-    <main className={Styles.Content}>{props.children}</main>
-  </>
-);
+interface LayoutState {
+  isDrawerVisible: boolean;
+}
 
-export default layout;
- 
+class Layout extends Component<LayoutProps, LayoutState> {
+  state = {
+    isDrawerVisible: false,
+  };
+
+  drawerShowHandler = () => {
+    this.setState((prevState) => ({
+      isDrawerVisible: !prevState.isDrawerVisible,
+    }));
+  };
+
+  render() {
+    return (
+      <>
+        <Toolbar toggleHandler={this.drawerShowHandler} />
+        <SideDrawer
+          show={this.state.isDrawerVisible}
+          closeHandler={this.drawerShowHandler}
+        />
+        <main className={classes.Content}>{this.props.children}</main>
+      </>
+    );
+  }
+}
+
+export default Layout;

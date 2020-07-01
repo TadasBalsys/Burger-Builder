@@ -1,10 +1,10 @@
 import React from 'react';
 
 import NavItem from '../NavItem/NavItem';
-import styles from './NavItemsList.module.css';
+import classes from './NavItemsList.module.css';
 
 const navItemsList = () => (
-  <ul className={styles.NavItems}>
+  <ul className={classes.NavItems}>
     <NavItem link={'/'} active>
       Burger Builder
     </NavItem>

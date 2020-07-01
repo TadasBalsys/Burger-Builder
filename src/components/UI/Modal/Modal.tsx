@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 
 import Backdrop from '../Backdrop/Backdrop';
 
-import styles from './Modal.module.css';
+import classes from './Modal.module.css';
 
 interface ModalProps {
   children: ReactNode;
@@ -12,9 +12,9 @@ interface ModalProps {
 
 const modal: React.FC<ModalProps> = (props) => (
   <>
-    <Backdrop show={props.show} closeHandler={props.closeModalHandler}/>
+    <Backdrop show={props.show} closeHandler={props.closeModalHandler} />
     <div
-      className={styles.Modal}
+      className={classes.Modal}
       style={{
         transform: props.show ? 'translateY(0)' : 'translateY(-100vh)',
         opacity: props.show ? '1' : '0',

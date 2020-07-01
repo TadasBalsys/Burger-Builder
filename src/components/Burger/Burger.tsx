@@ -2,7 +2,7 @@ import React from 'react';
 
 import BurgerIngredient from './BurgerIngredient/BurgerIngredient';
 
-import styles from './Burger.module.css';
+import classes from './Burger.module.css';
 
 interface BurgerProps {
   ingredients: Ingredients;
@@ -36,7 +36,7 @@ const burger: React.FC<BurgerProps> = ({ ingredients }): JSX.Element => {
   const isBurgerNotEmpty: Boolean = Boolean(ingElemLength);
 
   return (
-    <div className={styles.Burger}>
+    <div className={classes.Burger}>
       <BurgerIngredient type='bread-top' />
       {isBurgerNotEmpty ? ingredientElements : <h6>Please added ingredient</h6>}
       <BurgerIngredient type='bread-bottom' />
