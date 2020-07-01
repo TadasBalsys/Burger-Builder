@@ -1,7 +1,7 @@
 import React from 'react';
 
 import NavItemsList from '../NavItemsList/NavItemsList';
-import Logo from '../../Logo/Logo';
+import Logo from '../../UI/Logo/Logo';
 import MenuIcon from '../MenuIcon/MenuIcon';
 
 import classes from './Toolbar.module.css';
