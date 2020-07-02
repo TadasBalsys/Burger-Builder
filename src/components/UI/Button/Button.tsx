@@ -5,7 +5,7 @@ import classes from './Button.module.css';
 interface ButtonProps {
   btnType: string;
   children: string;
-  clickedHandler: (e: React.MouseEvent) => void;
+  clickedHandler?: (e: React.MouseEvent) => void;
 }
 
 const Button: React.FC<ButtonProps> = ({

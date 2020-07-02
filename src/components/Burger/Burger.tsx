@@ -4,7 +4,7 @@ import BurgerIngredient from './BurgerIngredient/BurgerIngredient';
 
 import classes from './Burger.module.css';
 
-interface BurgerProps {
+export interface BurgerProps {
   ingredients: Ingredients;
 }
 
@@ -12,7 +12,7 @@ export interface Ingredients {
   [key: string] : number
 }
 
-const burger: React.FC<BurgerProps> = ({ ingredients }): JSX.Element => {
+const Burger: React.FC<BurgerProps> = ({ ingredients }): JSX.Element => {
   const ingredientsNames: string[] = Object.keys(ingredients);
   /*
   Maps thru ingredientsNames array, and gets value from ingredients obj by mapped value (ingredient: string),
@@ -41,4 +41,4 @@ const burger: React.FC<BurgerProps> = ({ ingredients }): JSX.Element => {
   );
 };
 
-export default burger;
+export default Burger;

@@ -6,7 +6,7 @@ import SideDrawer from '../../components/Navigation/SideDrawer/SideDrawer';
 import classes from './Layout.module.css';
 
 interface LayoutProps {
-  children: JSX.Element;
+  children: JSX.Element[];
 }
 
 interface LayoutState {
