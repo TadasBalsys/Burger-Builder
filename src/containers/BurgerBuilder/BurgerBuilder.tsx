@@ -20,8 +20,7 @@ interface BurgerBuilderState {
   error: boolean;
 }
 
-interface BurgerBuilderProps extends RouteComponentProps {
-}
+interface BurgerBuilderProps extends RouteComponentProps {}
 
 const IngredientsPrices: Ingredients = {
   salad: 0.5,
@@ -35,14 +34,14 @@ class BurgerBuilder extends Component<BurgerBuilderProps, BurgerBuilderState> {
     super(props);
 
     this.state = {
-    ingredients: {} as Ingredients,
-    hasIngredients: false,
-    isPurchasable: false,
-    purchasing: false,
-    totalPrice: 0,
-    isLoading: false,
-    error: false,
-  }; 
+      ingredients: {} as Ingredients,
+      hasIngredients: false,
+      isPurchasable: false,
+      purchasing: false,
+      totalPrice: 0,
+      isLoading: false,
+      error: false,
+    };
   }
 
   componentDidMount() {
@@ -127,8 +126,19 @@ class BurgerBuilder extends Component<BurgerBuilderProps, BurgerBuilderState> {
     //   .catch((error) => {
     //     this.setState({ isLoading: false, purchasing: false });
     //   });
-    console.log(this.props);
-    // this.props.history.push('/checkout')
+    const queryParams = [];
+    for (const key in this.state.ingredients) {
+      queryParams.push(
+        encodeURIComponent(key) +
+          '=' +
+          encodeURIComponent(this.state.ingredients[key])
+      );
+    }
+    const queryString = queryParams.join('&');
+    this.props.history.push({
+      pathname: '/checkout',
+      search: '?' + queryString,
+    });
   };
 
   purchaseHandler = () =>
