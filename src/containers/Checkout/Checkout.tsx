@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { RouteComponentProps } from 'react-router-dom';
+import { Route, RouteComponentProps } from 'react-router-dom';
 
 import CheckoutSummary from '../../components/Order/CheckoutSummary/CheckoutSummary';
+import ContactData from '../../containers/Checkout/ContactData/ContactData';
 import { Ingredients } from '../../components/Burger/Burger';
 
 interface CheckoutProps extends RouteComponentProps {}
@@ -36,6 +37,10 @@ class Checkout extends Component<CheckoutProps, CheckoutSate> {
           ingredients={this.state.ingredients}
           checkoutCancel={this.checkoutCancelHandler}
           checkoutContinue={this.checkoutContinueHandler}
+        />
+        <Route
+          path={this.props.match.path + '/contact-data'}
+          component={ContactData}
         />
       </div>
     );
