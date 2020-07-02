@@ -5,8 +5,8 @@ import Backdrop from '../Backdrop/Backdrop';
 import classes from './Modal.module.css';
 
 interface ModalProps {
-  children: ReactNode;
-  closeModalHandler: (e: React.MouseEvent) => void;
+  children: ReactNode | string;
+  closeModalHandler: (e: React.MouseEvent) => void | undefined;
   show: boolean;
 }
 
