@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { RouteComponentProps, Route } from 'react-router-dom';
 
 import Burger, { Ingredients } from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
@@ -19,6 +20,9 @@ interface BurgerBuilderState {
   error: boolean;
 }
 
+interface BurgerBuilderProps extends RouteComponentProps {
+}
+
 const IngredientsPrices: Ingredients = {
   salad: 0.5,
   cheese: 0.4,
@@ -26,8 +30,11 @@ const IngredientsPrices: Ingredients = {
   bacon: 0.7,
 };
 
-class BurgerBuilder extends Component<{}, BurgerBuilderState> {
-  state = {
+class BurgerBuilder extends Component<BurgerBuilderProps, BurgerBuilderState> {
+  constructor(props: any) {
+    super(props);
+
+    this.state = {
     ingredients: {} as Ingredients,
     hasIngredients: false,
     isPurchasable: false,
@@ -35,7 +42,8 @@ class BurgerBuilder extends Component<{}, BurgerBuilderState> {
     totalPrice: 0,
     isLoading: false,
     error: false,
-  };
+  }; 
+  }
 
   componentDidMount() {
     axios
@@ -96,29 +104,31 @@ class BurgerBuilder extends Component<{}, BurgerBuilderState> {
   };
 
   continuePurchaseHandler = () => {
-    this.setState({ isLoading: true });
-    const order = {
-      ingredient: this.state.ingredients,
-      price: this.state.totalPrice,
-      customer: {
-        name: 'Tadas Balsys',
-        address: {
-          street: 'Test str. 1',
-          zipCode: 45115,
-          country: 'Germany',
-        },
-        email: 'test@test.com',
-      },
-      delivery: 'fastest',
-    };
-    axios
-      .post('/orders.json', order)
-      .then((response) => {
-        this.setState({ isLoading: false, purchasing: false });
-      })
-      .catch((error) => {
-        this.setState({ isLoading: false, purchasing: false });
-      });
+    // this.setState({ isLoading: true });
+    // const order = {
+    //   ingredient: this.state.ingredients,
+    //   price: this.state.totalPrice,
+    //   customer: {
+    //     name: 'Tadas Balsys',
+    //     address: {
+    //       street: 'Test str. 1',
+    //       zipCode: 45115,
+    //       country: 'Germany',
+    //     },
+    //     email: 'test@test.com',
+    //   },
+    //   delivery: 'fastest',
+    // };
+    // axios
+    //   .post('/orders.json', order)
+    //   .then((response) => {
+    //     this.setState({ isLoading: false, purchasing: false });
+    //   })
+    //   .catch((error) => {
+    //     this.setState({ isLoading: false, purchasing: false });
+    //   });
+    console.log(this.props);
+    // this.props.history.push('/checkout')
   };
 
   purchaseHandler = () =>
@@ -146,7 +156,6 @@ class BurgerBuilder extends Component<{}, BurgerBuilderState> {
     );
 
     if (this.state.hasIngredients) {
-      console.log(this.state.ingredients);
       burgerSpinner = (
         <>
           <Burger ingredients={this.state.ingredients} />

@@ -8,7 +8,7 @@ interface wEHState {
 }
 
 const withErrorHandler = <P extends {}>(
-  WrappedComponent: React.ComponentType,
+  WrappedComponent: Function,
   axios: AxiosInstance
 ) => {
   return class extends Component<P, wEHState> {
@@ -47,7 +47,7 @@ const withErrorHandler = <P extends {}>(
           >
             {this.state.errorMessage ? this.state.errorMessage : null}
           </Modal>
-          <WrappedComponent />
+          <WrappedComponent {...this.props} />
         </>
       );
     }
