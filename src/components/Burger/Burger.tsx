@@ -9,10 +9,7 @@ interface BurgerProps {
 }
 
 export interface Ingredients {
-  salad: number;
-  bacon: number;
-  cheese: number;
-  meat: number;
+  [key: string] : number
 }
 
 const burger: React.FC<BurgerProps> = ({ ingredients }): JSX.Element => {

@@ -19,7 +19,7 @@ const withErrorHandler = <P extends {}>(
       errorMessage: '',
     };
 
-    componentDidMount() {
+    componentWillMount() {
       this.reqInterceptor = axios.interceptors.request.use((req) => {
         this.setState({ errorMessage: '' });
         return req;
@@ -29,6 +29,11 @@ const withErrorHandler = <P extends {}>(
         (res) => res,
         (error: Error) => this.setState({ errorMessage: error.message })
       );
+    }
+
+    componentWillUnmount() {
+      axios.interceptors.request.eject(this.reqInterceptor);
+      axios.interceptors.response.eject(this.resInterceptor);
     }
 
     closeModalHandler = () => this.setState({ errorMessage: '' });
