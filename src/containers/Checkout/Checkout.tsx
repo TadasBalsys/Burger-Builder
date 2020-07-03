@@ -7,12 +7,12 @@ import { Ingredients } from '../../components/Burger/Burger';
 
 interface CheckoutProps extends RouteComponentProps {}
 
-interface CheckoutSate {
+export interface CheckoutState {
   ingredients: Ingredients;
   totalPrice: number;
 }
 
-class Checkout extends Component<CheckoutProps, CheckoutSate> {
+class Checkout extends Component<CheckoutProps, CheckoutState> {
   state = {
     ingredients: {} as Ingredients,
     totalPrice: 0,

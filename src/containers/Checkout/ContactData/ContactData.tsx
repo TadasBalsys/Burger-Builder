@@ -13,13 +13,26 @@ interface ContactDataProps extends RouteComponentProps {
   totalPrice: number;
 }
 
-class ContactData extends Component<ContactDataProps> {
+export interface CustomerData {
+  name: string;
+  email: string;
+  address: {
+    street: string;
+    postalCode: number;
+  };
+}
+
+interface ContactDataState extends CustomerData {
+  isLoading: boolean
+}
+
+class ContactData extends Component<ContactDataProps, ContactDataState> {
   state = {
     name: '',
     email: '',
     address: {
       street: '',
-      postalCode: '',
+      postalCode: 0,
     },
     isLoading: false,
   };
@@ -28,18 +41,16 @@ class ContactData extends Component<ContactDataProps> {
     event.preventDefault();
     this.setState({ isLoading: true });
     const order = {
-      ingredient: this.props.ingredients,
-      price: this.props.totalPrice,
+      ingredients: this.props.ingredients,
+      totalPrice: this.props.totalPrice,
       customer: {
         name: 'Tadas Balsys',
+        email: 'test@test.com',
         address: {
           street: 'Test str. 1',
-          zipCode: 45115,
-          country: 'Germany',
+          postalCode: 45115,
         },
-        email: 'test@test.com',
       },
-      delivery: 'fastest',
     };
     axios
       .post('/orders.json', order)

@@ -19,6 +19,8 @@ const Burger: React.FC<BurgerProps> = ({ ingredients }): JSX.Element => {
   use that value to create new Array (Array(ingredients[ingredient as keyof Ingredients]))
   and than maps that new Array and for each array element returns BurgerIngredient JSX.Element;
   */
+
+  // TODO: Refactor this to something like in Order component
   const ingredientElements: JSX.Element[][] = ingredientsNames.map(
     (ingredient: string) => {
       return [...Array(ingredients[ingredient as keyof Ingredients])].map(

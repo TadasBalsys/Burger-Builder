@@ -5,10 +5,10 @@ import classes from './NavItemsList.module.css';
 
 const navItemsList = () => (
   <ul className={classes.NavItems}>
-    <NavItem link={'/'} active>
+    <NavItem exact link={'/'}>
       Burger Builder
     </NavItem>
-    <NavItem link={'/'}>Checkout</NavItem>
+    <NavItem link={'/orders'}>Order</NavItem>
   </ul>
 );
 
