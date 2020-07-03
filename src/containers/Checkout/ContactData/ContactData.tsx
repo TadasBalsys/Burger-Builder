@@ -17,10 +17,8 @@ interface ContactDataProps extends RouteComponentProps {
 export interface CustomerData {
   name: string;
   email: string;
-  address: {
-    street: string;
-    zipCode: number;
-  };
+  street: string;
+  zipCode: number;
 }
 
 interface ContactDataState extends CustomerData {
@@ -38,7 +36,7 @@ interface OrderForms {
 
 interface InputTypeInput {
   elementType: string;
-  elementConfig: InputElementConfig
+  elementConfig: InputElementConfig;
   value: string;
 }
 
@@ -109,10 +107,8 @@ class ContactData extends Component<ContactDataProps, ContactDataState> {
 
     name: '',
     email: '',
-    address: {
-      street: '',
-      zipCode: 0,
-    },
+    street: '',
+    zipCode: 0,
 
     isLoading: false,
   };
@@ -143,6 +139,17 @@ class ContactData extends Component<ContactDataProps, ContactDataState> {
       });
   };
 
+  inputChangeHandler = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    inputIdentifier: string
+  ) => {
+    const inputValue: string | number = event.target.value;
+    this.setState((prevState) => ({
+      ...prevState,
+      [inputIdentifier]: inputValue,
+    }));
+  };
+
   render() {
     let formElementsArr = [];
     for (const key in this.state.orderForm) {
@@ -160,8 +167,10 @@ class ContactData extends Component<ContactDataProps, ContactDataState> {
             <Input
               key={value + i}
               elementType={elementType}
-              value={value}
               elementConfig={elementConfig}
+              changeHandler={(event) =>
+                this.inputChangeHandler(event, input.id)
+              }
             />
           );
         })}

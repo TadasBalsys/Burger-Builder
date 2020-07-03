@@ -9,8 +9,8 @@ import {
 interface InputProps {
   elementType: string;
   label?: string;
-  value: string;
   elementConfig: SelectConfig | InputElementConfig;
+  changeHandler: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 interface SelectConfig {
@@ -31,17 +31,13 @@ const Input: React.FC<InputProps> = (props) => {
         <input
           className={classes.InputElement}
           {...props.elementConfig}
-          value={props.value}
+          onChange={props.changeHandler}
         />
       );
       break;
     case 'textarea':
       InputElement = (
-        <textarea
-          className={classes.InputElement}
-          {...props.elementConfig}
-          value={props.value}
-        />
+        <textarea className={classes.InputElement} {...props.elementConfig} />
       );
       break;
     case 'select':
@@ -51,7 +47,7 @@ const Input: React.FC<InputProps> = (props) => {
       // let isSelect = isSelectInput(props.elementConfig);
       if (isSelectInput(props.elementConfig))
         InputElement = (
-          <select className={classes.InputElement} value={props.value}>
+          <select className={classes.InputElement}>
             {props.elementConfig.options.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.value}
@@ -62,11 +58,7 @@ const Input: React.FC<InputProps> = (props) => {
       break;
     default:
       InputElement = (
-        <input
-          className={classes.InputElement}
-          {...props.elementConfig}
-          value={props.value}
-        />
+        <input className={classes.InputElement} {...props.elementConfig} />
       );
   }
 
