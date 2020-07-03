@@ -3,6 +3,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import Button from '../../../components/UI/Button/Button';
 import Spinner from '../../../components/UI/Spinner/Spinner';
+import Input from '../../../components/UI/Input/Input';
 import { Ingredients } from '../../../components/Burger/Burger';
 
 import classes from './ContactData.module.css';
@@ -23,7 +24,7 @@ export interface CustomerData {
 }
 
 interface ContactDataState extends CustomerData {
-  isLoading: boolean
+  isLoading: boolean;
 }
 
 class ContactData extends Component<ContactDataProps, ContactDataState> {
@@ -66,30 +67,10 @@ class ContactData extends Component<ContactDataProps, ContactDataState> {
   render() {
     let form = (
       <form action=''>
-        <input
-          className={classes.Input}
-          type='text'
-          name='name'
-          placeholder='Your Name'
-        />
-        <input
-          className={classes.Input}
-          type='email'
-          name='email'
-          placeholder='Your Email'
-        />
-        <input
-          className={classes.Input}
-          type='text'
-          name='street'
-          placeholder='Your Street'
-        />
-        <input
-          className={classes.Input}
-          type='text'
-          name='postal'
-          placeholder='Postal'
-        />
+        <Input input_type='input' placeholder='Your Name' />
+        <Input input_type='input' placeholder='Your Email' />
+        <Input input_type='input' placeholder='Your Street' />
+        <Input input_type='input' placeholder='Postal' />
         <Button btnType='Success' clickedHandler={this.orderHandler}>
           Order
         </Button>
