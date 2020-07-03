@@ -9,20 +9,27 @@ interface CheckoutProps extends RouteComponentProps {}
 
 interface CheckoutSate {
   ingredients: Ingredients;
+  totalPrice: number;
 }
 
 class Checkout extends Component<CheckoutProps, CheckoutSate> {
   state = {
     ingredients: {} as Ingredients,
+    totalPrice: 0,
   };
 
-  componentDidMount() {
+  componentWillMount() {
     const query = new URLSearchParams(this.props.location.search);
     const ingredients: { [key: string]: number } = {};
+    let price = 0;
     for (const param of query.entries()) {
-      ingredients[param[0]] = +param[1];
+      if (param[0] === 'price') {
+        price = +param[1];
+      } else {
+        ingredients[param[0]] = +param[1];
+      }
     }
-    this.setState({ ingredients: ingredients });
+    this.setState({ ingredients: ingredients, totalPrice: price });
   }
 
   checkoutCancelHandler = () => this.props.history.goBack();
@@ -40,7 +47,12 @@ class Checkout extends Component<CheckoutProps, CheckoutSate> {
         />
         <Route
           path={this.props.match.path + '/contact-data'}
-          component={ContactData}
+          component={() => (
+            <ContactData
+              ingredients={this.state.ingredients}
+              totalPrice={this.state.totalPrice}
+            />
+          )}
         />
       </div>
     );

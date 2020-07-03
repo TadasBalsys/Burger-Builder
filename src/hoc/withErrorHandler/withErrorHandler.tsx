@@ -8,7 +8,7 @@ interface wEHState {
 }
 
 const withErrorHandler = <P extends {}>(
-  WrappedComponent: Function,
+  WrappedComponent: React.ComponentType,
   axios: AxiosInstance
 ) => {
   return class extends Component<P, wEHState> {
