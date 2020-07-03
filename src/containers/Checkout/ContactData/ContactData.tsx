@@ -19,22 +19,101 @@ export interface CustomerData {
   email: string;
   address: {
     street: string;
-    postalCode: number;
+    zipCode: number;
   };
 }
 
 interface ContactDataState extends CustomerData {
   isLoading: boolean;
+  orderForm: OrderForms;
+}
+
+interface OrderForms {
+  name: InputTypeInput;
+  email: InputTypeInput;
+  street: InputTypeInput;
+  zipCode: InputTypeInput;
+  deliveryMethod: InputTypeSelect;
+}
+
+interface InputTypeInput {
+  elementType: string;
+  elementConfig: InputElementConfig
+  value: string;
+}
+
+export interface InputTypeSelect {
+  elementType: string;
+  elementConfig: {
+    options: SelectElementConfig[];
+  };
+  value: string;
+}
+
+export interface InputElementConfig {
+  type: string;
+  placeholder: string;
+}
+
+export interface SelectElementConfig {
+  value: string;
+  displayValue: string;
 }
 
 class ContactData extends Component<ContactDataProps, ContactDataState> {
   state = {
+    orderForm: {
+      name: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'text',
+          placeholder: 'Your Name',
+        },
+        value: '',
+      } as InputTypeInput,
+      email: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'email',
+          placeholder: 'Your Name',
+        },
+        value: '',
+      } as InputTypeInput,
+      street: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'text',
+          placeholder: 'Street',
+        },
+        value: '',
+      } as InputTypeInput,
+      zipCode: {
+        elementType: 'input',
+        elementConfig: {
+          type: 'number',
+          placeholder: 'ZIP Code',
+        },
+        value: '',
+      } as InputTypeInput,
+      deliveryMethod: {
+        elementType: 'select',
+        elementConfig: {
+          options: [
+            { value: 'fastest', displayValue: 'Fastest' },
+            { value: 'cheapest', displayValue: 'Cheapest' },
+          ],
+        },
+        value: '',
+      } as InputTypeSelect,
+    },
+
     name: '',
     email: '',
     address: {
       street: '',
-      postalCode: 0,
+      zipCode: 0,
     },
+
     isLoading: false,
   };
 
@@ -49,7 +128,7 @@ class ContactData extends Component<ContactDataProps, ContactDataState> {
         email: 'test@test.com',
         address: {
           street: 'Test str. 1',
-          postalCode: 45115,
+          zipCode: 45115,
         },
       },
     };
@@ -65,12 +144,27 @@ class ContactData extends Component<ContactDataProps, ContactDataState> {
   };
 
   render() {
+    let formElementsArr = [];
+    for (const key in this.state.orderForm) {
+      formElementsArr.push({
+        id: key,
+        config: this.state.orderForm[key as keyof OrderForms],
+      });
+    }
+
     let form = (
       <form action=''>
-        <Input input_type='input' placeholder='Your Name' />
-        <Input input_type='input' placeholder='Your Email' />
-        <Input input_type='input' placeholder='Your Street' />
-        <Input input_type='input' placeholder='Postal' />
+        {formElementsArr.map((input, i) => {
+          const { elementConfig, elementType, value } = input.config;
+          return (
+            <Input
+              key={value + i}
+              elementType={elementType}
+              value={value}
+              elementConfig={elementConfig}
+            />
+          );
+        })}
         <Button btnType='Success' clickedHandler={this.orderHandler}>
           Order
         </Button>
