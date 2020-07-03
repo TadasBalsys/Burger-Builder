@@ -10,7 +10,9 @@ interface InputProps {
   elementType: string;
   label?: string;
   elementConfig: SelectConfig | InputElementConfig;
-  changeHandler: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  changeHandler: (
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => void;
 }
 
 interface SelectConfig {
@@ -47,7 +49,10 @@ const Input: React.FC<InputProps> = (props) => {
       // let isSelect = isSelectInput(props.elementConfig);
       if (isSelectInput(props.elementConfig))
         InputElement = (
-          <select className={classes.InputElement}>
+          <select
+            className={classes.InputElement}
+            onChange={props.changeHandler}
+          >
             {props.elementConfig.options.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.value}

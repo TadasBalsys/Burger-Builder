@@ -19,6 +19,7 @@ export interface CustomerData {
   email: string;
   street: string;
   zipCode: number;
+  deliveryMethod: string;
 }
 
 interface ContactDataState extends CustomerData {
@@ -109,7 +110,7 @@ class ContactData extends Component<ContactDataProps, ContactDataState> {
     email: '',
     street: '',
     zipCode: 0,
-
+    deliveryMethod: '',
     isLoading: false,
   };
 
@@ -120,12 +121,11 @@ class ContactData extends Component<ContactDataProps, ContactDataState> {
       ingredients: this.props.ingredients,
       totalPrice: this.props.totalPrice,
       customer: {
-        name: 'Tadas Balsys',
-        email: 'test@test.com',
-        address: {
-          street: 'Test str. 1',
-          zipCode: 45115,
-        },
+        name: this.state.name,
+        email: this.state.email,
+        street: this.state.street,
+        zipCode: this.state.zipCode,
+        deliveryMethod: this.state.deliveryMethod,
       },
     };
     axios
@@ -140,14 +140,17 @@ class ContactData extends Component<ContactDataProps, ContactDataState> {
   };
 
   inputChangeHandler = (
-    event: React.ChangeEvent<HTMLInputElement>,
+    event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
     inputIdentifier: string
   ) => {
     const inputValue: string | number = event.target.value;
-    this.setState((prevState) => ({
-      ...prevState,
-      [inputIdentifier]: inputValue,
-    }));
+    this.setState(
+      (prevState) => ({
+        ...prevState,
+        [inputIdentifier]: inputValue,
+      }),
+      () => console.log(this.state)
+    );
   };
 
   render() {
