@@ -36,17 +36,29 @@ interface OrderForms {
 }
 
 interface InputTypeInput {
+  value: string;
   elementType: string;
   elementConfig: InputElementConfig;
-  value: string;
+  validation: {
+    required: boolean;
+    minLength?: number;
+    maxLength?: number;
+  };
+  isValid: boolean;
+  hasTouched: boolean;
 }
 
 export interface InputTypeSelect {
+  value: string;
   elementType: string;
   elementConfig: {
     options: SelectElementConfig[];
   };
-  value: string;
+  validation: {
+    required: boolean;
+  };
+  isValid: boolean;
+  hasTouched: boolean;
 }
 
 export interface InputElementConfig {
@@ -63,38 +75,61 @@ class ContactData extends Component<ContactDataProps, ContactDataState> {
   state = {
     orderForm: {
       name: {
+        value: '',
         elementType: 'input',
         elementConfig: {
           type: 'text',
           placeholder: 'Your Name',
         },
-        value: '',
+        validation: {
+          required: true,
+        },
+        isValid: false,
+        hasTouched: false,
       } as InputTypeInput,
       email: {
+        value: '',
         elementType: 'input',
         elementConfig: {
           type: 'email',
-          placeholder: 'Your Name',
+          placeholder: 'Your Email',
         },
-        value: '',
+        validation: {
+          required: true,
+        },
+        isValid: false,
+        hasTouched: false,
       } as InputTypeInput,
       street: {
+        value: '',
         elementType: 'input',
         elementConfig: {
           type: 'text',
           placeholder: 'Street',
         },
-        value: '',
+        validation: {
+          required: true,
+        },
+        isValid: false,
+        hasTouched: false,
       } as InputTypeInput,
       zipCode: {
+        value: '',
         elementType: 'input',
         elementConfig: {
           type: 'number',
           placeholder: 'ZIP Code',
         },
-        value: '',
+        validation: {
+          required: true,
+          minLength: 5,
+          maxLength: 5,
+        },
+        isValid: false,
+        hasTouched: false,
       } as InputTypeInput,
       deliveryMethod: {
+        value: '',
         elementType: 'select',
         elementConfig: {
           options: [
@@ -102,7 +137,11 @@ class ContactData extends Component<ContactDataProps, ContactDataState> {
             { value: 'cheapest', displayValue: 'Cheapest' },
           ],
         },
-        value: '',
+        validation: {
+          required: false,
+        },
+        isValid: false,
+        hasTouched: false,
       } as InputTypeSelect,
     },
 
@@ -110,7 +149,7 @@ class ContactData extends Component<ContactDataProps, ContactDataState> {
     email: '',
     street: '',
     zipCode: 0,
-    deliveryMethod: '',
+    deliveryMethod: 'fastest',
     isLoading: false,
   };
 
@@ -139,18 +178,52 @@ class ContactData extends Component<ContactDataProps, ContactDataState> {
       });
   };
 
+  // Type Checker
+  hasMinLengthProp = (
+    input: InputTypeInput | InputTypeSelect
+  ): input is InputTypeInput =>
+    (input as InputTypeInput).validation.minLength !== undefined;
+
+  checkValidity = (value: string, rules: InputTypeInput | InputTypeSelect) => {
+    let isValid = true;
+
+    if (rules.validation.required) {
+      isValid = value.trim() !== '' && isValid;
+    }
+    if (this.hasMinLengthProp(rules)) {
+      const minLength = rules.validation.minLength;
+      const maxLength = rules.validation.maxLength;
+      if (minLength && maxLength) {
+        isValid =
+          value.length >= minLength && value.length <= maxLength && isValid;
+      }
+    }
+
+    return isValid;
+  };
+
   inputChangeHandler = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
     inputIdentifier: string
   ) => {
     const inputValue: string | number = event.target.value;
-    this.setState(
-      (prevState) => ({
-        ...prevState,
-        [inputIdentifier]: inputValue,
-      }),
-      () => console.log(this.state)
-    );
+    let hasTouched: boolean = inputValue.length ? true : false;
+
+    const key = this.state.orderForm[inputIdentifier as keyof CustomerData];
+    const isValid = this.checkValidity(inputValue, key);
+
+    this.setState((prevState) => ({
+      ...prevState,
+      [inputIdentifier]: inputValue,
+      orderForm: {
+        ...prevState.orderForm,
+        [inputIdentifier]: {
+          ...prevState.orderForm[inputIdentifier as keyof OrderForms],
+          isValid: isValid,
+          hasTouched,
+        },
+      },
+    }));
   };
 
   render() {
@@ -165,12 +238,22 @@ class ContactData extends Component<ContactDataProps, ContactDataState> {
     let form = (
       <form action=''>
         {formElementsArr.map((input, i) => {
-          const { elementConfig, elementType, value } = input.config;
+          const {
+            elementConfig,
+            elementType,
+            value,
+            isValid,
+            hasTouched,
+            validation,
+          } = input.config;
           return (
             <Input
               key={value + i}
               elementType={elementType}
               elementConfig={elementConfig}
+              validation={validation.required}
+              invalid={isValid}
+              hasTouched={hasTouched}
               changeHandler={(event) =>
                 this.inputChangeHandler(event, input.id)
               }

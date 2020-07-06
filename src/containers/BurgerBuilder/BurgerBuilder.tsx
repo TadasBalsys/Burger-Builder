@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { RouteComponentProps, Route } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router-dom';
 
 import Burger, { Ingredients } from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';

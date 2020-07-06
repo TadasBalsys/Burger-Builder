@@ -10,6 +10,9 @@ interface InputProps {
   elementType: string;
   label?: string;
   elementConfig: SelectConfig | InputElementConfig;
+  validation: boolean;
+  invalid: boolean;
+  hasTouched: boolean;
   changeHandler: (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => void;
@@ -27,11 +30,19 @@ const Input: React.FC<InputProps> = (props) => {
     input: SelectConfig | InputElementConfig
   ): input is SelectConfig => (input as SelectConfig).options !== undefined;
 
+  const inputClasses = [classes.InputElement];
+
+  if (!props.invalid && props.validation && props.hasTouched) {
+    inputClasses.push(classes.Invalid);
+  } else {
+    inputClasses.filter((value) => value !== classes.Invalid);
+  }
+
   switch (props.elementType) {
     case 'input':
       InputElement = (
         <input
-          className={classes.InputElement}
+          className={inputClasses.join(' ')}
           {...props.elementConfig}
           onChange={props.changeHandler}
         />
@@ -39,7 +50,7 @@ const Input: React.FC<InputProps> = (props) => {
       break;
     case 'textarea':
       InputElement = (
-        <textarea className={classes.InputElement} {...props.elementConfig} />
+        <textarea className={inputClasses.join(' ')} {...props.elementConfig} />
       );
       break;
     case 'select':
@@ -50,7 +61,7 @@ const Input: React.FC<InputProps> = (props) => {
       if (isSelectInput(props.elementConfig))
         InputElement = (
           <select
-            className={classes.InputElement}
+            className={inputClasses.join(' ')}
             onChange={props.changeHandler}
           >
             {props.elementConfig.options.map((option) => (
