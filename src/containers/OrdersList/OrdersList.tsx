@@ -2,15 +2,17 @@ import React, { Component } from 'react';
 import axios from '../../axios-orders';
 
 import Order from '../../components/Order/Order';
-import { CheckoutState } from '../Checkout/Checkout';
 import { CustomerData } from '../Checkout/ContactData/ContactData';
+import { Ingredients } from '../../components/Burger/Burger';
 
 interface OrdersListState {
   orders: OrderData[] | undefined;
   isLoading: boolean;
 }
 
-export interface OrderData extends CheckoutState {
+interface OrderData {
+  ingredients: Ingredients;
+  totalPrice: number;
   id: string;
   customer: CustomerData;
 }
@@ -45,16 +47,13 @@ class OrdersList extends Component<{}, OrdersListState> {
   render() {
     return (
       <div>
-        {this.state.orders.map(
-          // (order, i: number): void=> {console.log(order)}
-          (order: OrderData) => (
-            <Order
-              key={order.id}
-              totalPrice={order.totalPrice}
-              ingredients={order.ingredients}
-            />
-          )
-        )}
+        {this.state.orders.map((order: OrderData) => (
+          <Order
+            key={order.id}
+            totalPrice={order.totalPrice}
+            ingredients={order.ingredients}
+          />
+        ))}
       </div>
     );
   }

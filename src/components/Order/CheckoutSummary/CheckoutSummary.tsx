@@ -1,9 +1,11 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 import Burger, { BurgerProps } from '../../Burger/Burger';
 import Button from '../../UI/Button/Button';
 
 import classes from './CheckoutSummary.module.css';
+import { StoreState } from '../../../store/reducer';
 
 interface CheckoutSummary extends BurgerProps {
   checkoutCancel: (e: React.MouseEvent) => void;
@@ -24,11 +26,15 @@ const CheckoutSummary: React.FC<CheckoutSummary> = ({
       <Button btnType='Danger' clickedHandler={checkoutCancel}>
         CANCEL
       </Button>
-      <Button btnType='Success' clickedHandler={checkoutContinue }>
+      <Button btnType='Success' clickedHandler={checkoutContinue}>
         CONTINUE
       </Button>
     </div>
   );
 };
 
-export default CheckoutSummary;
+const mapStateToProps = (state: StoreState) => ({
+  ingredients: state.ingredients,
+});
+
+export default connect(mapStateToProps)(CheckoutSummary);

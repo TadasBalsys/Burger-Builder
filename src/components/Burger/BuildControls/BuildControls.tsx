@@ -9,8 +9,8 @@ import { Action } from '../../../store/actions';
 
 interface BuildControlProps {
   price: number;
-  isPurchasable: boolean;
   disableInfo: { [x: string]: boolean };
+  isPurchasable: boolean;
   onIngrAdd: (ingrName: string) => void;
   onIngrRemove: (ingrName: string) => void;
   purchaseHandler: (e: React.MouseEvent) => void;
@@ -36,7 +36,14 @@ const controls: control[] = [
 ];
 
 const buildControls: React.FC<BuildControlProps> = (props): JSX.Element => {
-  const { price, isPurchasable, disableInfo, onIngrAdd, onIngrRemove, purchaseHandler } = props;
+  const {
+    price,
+    isPurchasable,
+    disableInfo,
+    onIngrAdd,
+    onIngrRemove,
+    purchaseHandler,
+  } = props;
 
   return (
     <div className={classes.BuildControls}>
