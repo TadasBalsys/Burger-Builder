@@ -13,9 +13,9 @@ function App() {
     <div className={classes.App}>
       <Layout>
         <Switch>
-          <Route path='/checkout' component={Checkout}/>
-          <Route path='/orders' component={OrdersList}/>
-          <Route exact path='/' component={BurgerBuilder}/>
+          <Route path='/checkout' component={Checkout} />
+          <Route path='/orders' component={OrdersList} />
+          <Route exact path='/' component={BurgerBuilder} />
         </Switch>
       </Layout>
     </div>

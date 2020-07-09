@@ -1,14 +1,18 @@
-import React from 'react';
+import React, { Dispatch } from 'react';
+import { connect } from 'react-redux';
 
 import BuildControl from './BuildControl/BuildControl';
 import classes from './BuildControls.module.css';
+
+import { ActionTypes } from '../../../store/actionTypes';
+import { Action } from '../../../store/actions';
 
 interface BuildControlProps {
   price: number;
   isPurchasable: boolean;
   disableInfo: { [x: string]: boolean };
-  ingredientsAdded: Function;
-  ingredientsRemoved: Function;
+  onIngrAdd: (ingrName: string) => void;
+  onIngrRemove: (ingrName: string) => void;
   purchaseHandler: (e: React.MouseEvent) => void;
 }
 
@@ -32,14 +36,7 @@ const controls: control[] = [
 ];
 
 const buildControls: React.FC<BuildControlProps> = (props): JSX.Element => {
-  const {
-    price,
-    isPurchasable,
-    disableInfo,
-    ingredientsAdded,
-    ingredientsRemoved,
-    purchaseHandler,
-  } = props;
+  const { price, isPurchasable, disableInfo, onIngrAdd, onIngrRemove, purchaseHandler } = props;
 
   return (
     <div className={classes.BuildControls}>
@@ -53,8 +50,8 @@ const buildControls: React.FC<BuildControlProps> = (props): JSX.Element => {
             <BuildControl
               key={label}
               label={label}
-              add={() => ingredientsAdded(type)}
-              remove={() => ingredientsRemoved(type)}
+              add={() => onIngrAdd(type)}
+              remove={() => onIngrRemove(type)}
               disable={disableInfo[type as keyof isIngredientDisable]}
             />
           );
@@ -71,4 +68,16 @@ const buildControls: React.FC<BuildControlProps> = (props): JSX.Element => {
   );
 };
 
-export default buildControls;
+const mapDispatchToProps = (dispatch: Dispatch<Action>) => {
+  return {
+    onIngrAdd: (ingrName: string) =>
+      dispatch({ type: ActionTypes.ADD_INGREDIENT, payload: ingrName }),
+    onIngrRemove: (ingrName: string) =>
+      dispatch({
+        type: ActionTypes.REMOVE_INGREDIENT,
+        payload: ingrName,
+      }),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(buildControls);
