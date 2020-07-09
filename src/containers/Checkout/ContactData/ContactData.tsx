@@ -6,7 +6,7 @@ import Button from '../../../components/UI/Button/Button';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
 import { Ingredients } from '../../../components/Burger/Burger';
-import { StoreState } from '../../../store/reducer';
+import { StoreState } from '../../../store/reducers/burgerBuilderReducer';
 
 import classes from './ContactData.module.css';
 import axios from '../../../axios-orders';

@@ -1,7 +1,7 @@
-import { Action } from './actions';
+import { Action } from '../actions/burgerBuilderActions';
 
-import { ActionTypes } from './actionTypes';
-import { Ingredients } from '../components/Burger/Burger';
+import { ActionTypes } from '../actions/actionTypes';
+import { Ingredients } from '../../components/Burger/Burger';
 
 export interface StoreState {
   ingredients: Ingredients;

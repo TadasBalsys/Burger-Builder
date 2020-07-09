@@ -11,7 +11,7 @@ import Spinner from '../../components/UI/Spinner/Spinner';
 
 import axios from '../../axios-orders';
 
-import { StoreState } from '../../store/reducer';
+import { StoreState } from '../../store/reducers/burgerBuilderReducer';
 
 interface BurgerBuilderState {
   hasIngredients: boolean;

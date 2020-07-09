@@ -4,7 +4,7 @@ import { Route, RouteComponentProps } from 'react-router-dom';
 
 import CheckoutSummary from '../../components/Order/CheckoutSummary/CheckoutSummary';
 import ContactData from '../../containers/Checkout/ContactData/ContactData';
-import { StoreState } from '../../store/reducer';
+import { StoreState } from '../../store/reducers/burgerBuilderReducer';
 
 interface CheckoutProps extends RouteComponentProps {}
 

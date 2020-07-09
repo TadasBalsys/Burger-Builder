@@ -5,7 +5,7 @@ import Burger, { BurgerProps } from '../../Burger/Burger';
 import Button from '../../UI/Button/Button';
 
 import classes from './CheckoutSummary.module.css';
-import { StoreState } from '../../../store/reducer';
+import { StoreState } from '../../../store/reducers/burgerBuilderReducer';
 
 interface CheckoutSummary extends BurgerProps {
   checkoutCancel: (e: React.MouseEvent) => void;
