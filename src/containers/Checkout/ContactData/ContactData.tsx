@@ -5,16 +5,28 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import Button from '../../../components/UI/Button/Button';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
+import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 import { Ingredients } from '../../../components/Burger/Burger';
 import { StoreState } from '../../../store/store';
 
-import classes from './ContactData.module.css';
+import { ThunkDispatch } from 'redux-thunk';
+import { submitOrderStart } from '../../../store/actions/orderActions';
 import axios from '../../../axios-orders';
+import classes from './ContactData.module.css';
 
-interface ContactDataProps extends RouteComponentProps {
+// Component Props
+interface OwnProps extends RouteComponentProps {}
+
+interface StateProps {
   ingredients: Ingredients;
   totalPrice: number;
 }
+
+interface DispatchProps {
+  submitOrder: (orderData: any) => void;
+}
+
+type Props = OwnProps & StateProps & DispatchProps;
 
 export interface CustomerData {
   name: string;
@@ -24,7 +36,7 @@ export interface CustomerData {
   deliveryMethod: string;
 }
 
-interface ContactDataState extends CustomerData {
+export interface ContactDataState extends CustomerData {
   isLoading: boolean;
   orderForm: OrderForms;
 }
@@ -37,30 +49,30 @@ interface OrderForms {
   deliveryMethod: InputTypeSelect;
 }
 
-interface InputTypeInput {
-  value: string;
+// Input Types
+interface Input {
   elementType: string;
+  isValid: boolean;
+  value: string;
+  hasTouched: boolean;
+}
+
+interface InputTypeInput extends Input {
   elementConfig: InputElementConfig;
   validation: {
     required: boolean;
     minLength?: number;
     maxLength?: number;
   };
-  isValid: boolean;
-  hasTouched: boolean;
 }
 
-export interface InputTypeSelect {
-  value: string;
-  elementType: string;
+export interface InputTypeSelect extends Input {
   elementConfig: {
     options: SelectElementConfig[];
   };
   validation: {
     required: boolean;
   };
-  isValid: boolean;
-  hasTouched: boolean;
 }
 
 export interface InputElementConfig {
@@ -73,7 +85,7 @@ export interface SelectElementConfig {
   displayValue: string;
 }
 
-class ContactData extends Component<ContactDataProps, ContactDataState> {
+class ContactData extends Component<Props, ContactDataState> {
   state = {
     orderForm: {
       name: {
@@ -157,7 +169,6 @@ class ContactData extends Component<ContactDataProps, ContactDataState> {
 
   orderHandler = (event: React.FormEvent) => {
     event.preventDefault();
-    this.setState({ isLoading: true });
     const order = {
       ingredients: this.props.ingredients,
       totalPrice: this.props.totalPrice,
@@ -169,15 +180,8 @@ class ContactData extends Component<ContactDataProps, ContactDataState> {
         deliveryMethod: this.state.deliveryMethod,
       },
     };
-    axios
-      .post('/orders.json', order)
-      .then((response) => {
-        this.setState({ isLoading: false });
-        this.props.history.push('/');
-      })
-      .catch((error) => {
-        this.setState({ isLoading: false });
-      });
+    // TODO: Added isLoading logic handler - show spinner when connect to database is progress
+    this.props.submitOrder(order);
   };
 
   // Type Checker || Type Guard
@@ -284,6 +288,14 @@ class ContactData extends Component<ContactDataProps, ContactDataState> {
 const mapStateToProps = (state: StoreState) => ({
   ingredients: state.ingredients,
   totalPrice: state.totalPrice,
+  // isLoading: state.loading
 });
 
-export default connect(mapStateToProps)(withRouter(ContactData));
+const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>) => ({
+  submitOrder: (orderData: any) => dispatch(submitOrderStart(orderData)),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(withErrorHandler<Props>(ContactData, axios)));

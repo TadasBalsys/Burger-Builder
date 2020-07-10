@@ -11,8 +11,6 @@ export interface toggleIngAction {
   payload: string;
 }
 
-//TODO: Test
-
 //FIXME: ANY
 export interface SetData {
   type: ActionTypes.SET_FETCHING_SUCCESS;
@@ -45,6 +43,7 @@ export const fetchData = (): ThunkAction<
   {},
   AnyAction
 > => async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
+  dispatch({ type: ActionTypes.SET_FETCHING_START });
   await axios
     .get('/ingredients.json')
     .then((response) =>
