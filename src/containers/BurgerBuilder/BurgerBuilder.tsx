@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-dom';
+import { ThunkDispatch } from 'redux-thunk';
 
 import Burger, { Ingredients } from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
@@ -11,43 +12,44 @@ import Spinner from '../../components/UI/Spinner/Spinner';
 
 import axios from '../../axios-orders';
 
-import { StoreState } from '../../store/reducers/burgerBuilderReducer';
+import { StoreState } from '../../store/store';
+import { fetchData } from '../../store/actions/burgerBuilderActions';
+
+interface OwnProps extends RouteComponentProps {}
+
+interface StateProps {
+  ingredients: Ingredients;
+  totalPrice: number;
+  hasIngredients: boolean;
+  fetchError: boolean;
+}
+
+interface DispatchProps {
+  fetchIngredients: () => void;
+}
+
+type BurgerBuilderProps = OwnProps & StateProps & DispatchProps;
 
 interface BurgerBuilderState {
-  hasIngredients: boolean;
   isPurchasable: boolean;
   purchasing: boolean;
   isLoading: boolean;
-  error: boolean;
-}
-
-interface BurgerBuilderProps extends RouteComponentProps {
-  ingredients: Ingredients;
-  totalPrice: number;
+  // error: boolean;
 }
 
 class BurgerBuilder extends Component<BurgerBuilderProps, BurgerBuilderState> {
-  constructor(props: any) {
+  constructor(props: BurgerBuilderProps) {
     super(props);
-
     this.state = {
-      hasIngredients: false,
       isPurchasable: false,
       purchasing: false,
       isLoading: false,
-      error: false,
+      // error: false,
     };
   }
 
-  componentDidMount() {
-    axios
-      .get('/ingredients.json')
-      .then((response) =>
-        this.setState({
-          hasIngredients: true,
-        })
-      )
-      .catch((error) => this.setState({ error: true }));
+  componentWillMount() {
+    this.props.fetchIngredients();
   }
 
   checkIsPurchasable = () => {
@@ -100,13 +102,13 @@ class BurgerBuilder extends Component<BurgerBuilderProps, BurgerBuilderState> {
       isDisable = { ...isDisable, [key]: booleanValue };
     }
     let orderSummarySpinner = <Spinner />;
-    let burgerSpinner = this.state.error ? (
+    let burgerSpinner = this.props.fetchError ? (
       <p>Ingredients can't be loaded</p>
     ) : (
       <Spinner />
     );
 
-    if (this.state.hasIngredients) {
+    if (this.props.hasIngredients) {
       burgerSpinner = (
         <>
           <Burger ingredients={this.props.ingredients} />
@@ -143,9 +145,20 @@ class BurgerBuilder extends Component<BurgerBuilderProps, BurgerBuilderState> {
   }
 }
 
-const mapStateToProps = (state: StoreState) => ({
+const mapStateToProps = (state: StoreState): StateProps => ({
   ingredients: state.ingredients,
   totalPrice: state.totalPrice,
+  hasIngredients: state.hasIngredients,
+  fetchError: state.fetchError,
 });
 
-export default connect(mapStateToProps)(withErrorHandler(BurgerBuilder, axios));
+const mapsDispatchToProps = (
+  dispatch: ThunkDispatch<{}, {}, any>
+): DispatchProps => ({
+  fetchIngredients: () => dispatch(fetchData()),
+});
+
+export default connect(
+  mapStateToProps,
+  mapsDispatchToProps
+)(withErrorHandler<BurgerBuilderProps>(BurgerBuilder, axios));

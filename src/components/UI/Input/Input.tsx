@@ -25,7 +25,7 @@ interface SelectConfig {
 const Input: React.FC<InputProps> = (props) => {
   let InputElement = undefined;
 
-  // Type checker
+  // Type checker || Type Guard
   const isSelectInput = (
     input: SelectConfig | InputElementConfig
   ): input is SelectConfig => (input as SelectConfig).options !== undefined;

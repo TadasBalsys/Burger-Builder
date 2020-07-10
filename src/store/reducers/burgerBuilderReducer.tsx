@@ -1,22 +1,14 @@
-import { Action } from '../actions/burgerBuilderActions';
-
 import { ActionTypes } from '../actions/actionTypes';
 import { Ingredients } from '../../components/Burger/Burger';
+import { StoreState } from '../store';
 
-export interface StoreState {
-  ingredients: Ingredients;
-  totalPrice: number;
-}
-
+//TODO: isFetchingData boolean variable are not used in the app. Remove it?
 const initialState: StoreState = {
-  // FIXME: Added mock data, remove when async redux added to app
-  ingredients: {
-    salad: 0,
-    bacon: 0,
-    cheese: 0,
-    meat: 0,
-  } as Ingredients,
+  ingredients: {} as Ingredients,
   totalPrice: 0,
+  isFetchingData: false,
+  hasIngredients: false,
+  fetchError: false,
 };
 
 const IngredientsPrices: Ingredients = {
@@ -26,7 +18,11 @@ const IngredientsPrices: Ingredients = {
   bacon: 0.7,
 };
 
-const reducer = (state: StoreState = initialState, action: Action) => {
+// FIXME: action: any. Change to Action
+const BurgerBuilderReducer = (
+  state: StoreState = initialState,
+  action: any
+): StoreState => {
   switch (action.type) {
     case ActionTypes.ADD_INGREDIENT:
       return {
@@ -46,9 +42,31 @@ const reducer = (state: StoreState = initialState, action: Action) => {
         },
         totalPrice: state.totalPrice - IngredientsPrices[action.payload],
       };
+    case ActionTypes.SET_FETCHING_START:
+      return {
+        ...state,
+        isFetchingData: true,
+        hasIngredients: false,
+        fetchError: false
+      };
+    case ActionTypes.SET_FETCHING_SUCCESS:
+      return {
+        ...state,
+        ingredients: action.payload,
+        isFetchingData: false,
+        hasIngredients: true,
+        fetchError: false,
+      };
+    case ActionTypes.SET_FETCHING_FAILURE:
+      return {
+        ...state,
+        isFetchingData: false,
+        hasIngredients: false,
+        fetchError: true,
+      };
     default:
       return state;
   }
 };
 
-export default reducer;
+export default BurgerBuilderReducer;
