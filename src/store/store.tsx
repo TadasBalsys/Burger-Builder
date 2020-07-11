@@ -19,6 +19,7 @@ export interface BurgerBuilderState {
 export interface OrderState {
   orders: CustomerData[];
   isLoading: boolean;
+  purchased: boolean;
 }
 
 export interface StoreState {

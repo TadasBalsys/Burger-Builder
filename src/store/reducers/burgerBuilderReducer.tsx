@@ -53,6 +53,7 @@ const burgerBuilderReducer = (
       return {
         ...state,
         ingredients: action.payload,
+        totalPrice: 0,
         isFetchingData: false,
         hasIngredients: true,
         fetchError: false,

@@ -21,3 +21,7 @@ export const submitOrderStart = (
     )
     .catch((error) => dispatch({ type: ActionTypes.SUBMIT_ORDER_FAILURE }));
 };
+
+export const purchaseInit = () => ({
+  type: ActionTypes.PURCHASE_INIT,
+});

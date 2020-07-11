@@ -14,6 +14,7 @@ import axios from '../../axios-orders';
 
 import { StoreState } from '../../store/store';
 import { fetchData } from '../../store/actions/burgerBuilderActions';
+import { purchaseInit } from '../../store/actions/orderActions';
 
 interface OwnProps extends RouteComponentProps {}
 
@@ -26,6 +27,7 @@ interface StateProps {
 
 interface DispatchProps {
   fetchIngredients: () => void;
+  purchaseInit: () => void;
 }
 
 type BurgerBuilderProps = OwnProps & StateProps & DispatchProps;
@@ -67,21 +69,9 @@ class BurgerBuilder extends Component<BurgerBuilderProps, BurgerBuilderState> {
   };
 
   continuePurchaseHandler = () => {
-    const queryParams = [];
-    for (const key in this.props.ingredients) {
-      queryParams.push(
-        encodeURIComponent(key) +
-          '=' +
-          encodeURIComponent(this.props.ingredients[key])
-      );
-    }
-    let price: number = +this.props.totalPrice.toFixed(2);
-    queryParams.push('price=' + price);
-    const queryString = queryParams.join('&');
-    this.props.history.push({
-      pathname: '/checkout',
-      search: '?' + queryString,
-    });
+    // TODO: Do I really need purchaseInit() method? Cause there is no visible difference with or without his method.
+    this.props.purchaseInit();
+    this.props.history.push('/checkout');
   };
 
   purchaseHandler = () =>
@@ -156,6 +146,7 @@ const mapsDispatchToProps = (
   dispatch: ThunkDispatch<{}, {}, any>
 ): DispatchProps => ({
   fetchIngredients: () => dispatch(fetchData()),
+  purchaseInit: () => dispatch(purchaseInit()),
 });
 
 export default connect(

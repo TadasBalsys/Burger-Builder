@@ -168,9 +168,9 @@ class ContactData extends Component<Props, ContactDataState> {
   };
 
   orderHandler = (event: React.FormEvent) => {
+    event.preventDefault();
     const { name, email, street, zipCode, deliveryMethod } = this.state;
     const { ingredients, totalPrice } = this.props;
-    event.preventDefault();
     const order = {
       ingredients,
       totalPrice,
@@ -184,6 +184,8 @@ class ContactData extends Component<Props, ContactDataState> {
     };
     // TODO: Added isLoading logic handler - show spinner when connect to database is progress
     this.props.submitOrder(order);
+    // "Redirects" back to main page
+    this.props.history.push('/');
   };
 
   // Type Checker || Type Guard
