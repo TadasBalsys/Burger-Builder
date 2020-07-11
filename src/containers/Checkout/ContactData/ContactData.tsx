@@ -168,16 +168,18 @@ class ContactData extends Component<Props, ContactDataState> {
   };
 
   orderHandler = (event: React.FormEvent) => {
+    const { name, email, street, zipCode, deliveryMethod } = this.state;
+    const { ingredients, totalPrice } = this.props;
     event.preventDefault();
     const order = {
-      ingredients: this.props.ingredients,
-      totalPrice: this.props.totalPrice,
+      ingredients,
+      totalPrice,
       customer: {
-        name: this.state.name,
-        email: this.state.email,
-        street: this.state.street,
-        zipCode: this.state.zipCode,
-        deliveryMethod: this.state.deliveryMethod,
+        name,
+        email,
+        street,
+        zipCode,
+        deliveryMethod,
       },
     };
     // TODO: Added isLoading logic handler - show spinner when connect to database is progress
@@ -286,9 +288,8 @@ class ContactData extends Component<Props, ContactDataState> {
 }
 
 const mapStateToProps = (state: StoreState) => ({
-  ingredients: state.ingredients,
-  totalPrice: state.totalPrice,
-  // isLoading: state.loading
+  ingredients: state.burgerBuilderState.ingredients,
+  totalPrice: state.burgerBuilderState.totalPrice,
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>) => ({

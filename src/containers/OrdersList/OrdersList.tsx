@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from '../../axios-orders';
 
 import Order from '../../components/Order/Order';
+
 import { CustomerData } from '../Checkout/ContactData/ContactData';
 import { Ingredients } from '../../components/Burger/Burger';
 
@@ -35,7 +36,6 @@ class OrdersList extends Component<{}, OrdersListState> {
             ...res.data[key],
           });
         }
-        console.log(fetchedOrders);
         this.setState(
           () => ({ orders: fetchedOrders, isLoading: false }),
           () => console.log(typeof this.state.orders)

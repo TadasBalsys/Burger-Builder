@@ -1,18 +1,12 @@
 import { ActionTypes } from '../actions/actionTypes';
+import { OrderState } from '../store';
 
-import { CustomerData } from '../../containers/Checkout/ContactData/ContactData';
-
-interface OrderReducerState {
-  orders: CustomerData[];
-  isLoading: boolean;
-}
-
-const initialState: OrderReducerState = {
+const initialState: OrderState = {
   orders: [],
   isLoading: false,
 };
 
-const orderReducer = (state = initialState, action: any) => {
+const orderReducer = (state: OrderState = initialState, action: any) => {
   switch (action.types) {
     case ActionTypes.SUBMIT_ORDER_START:
       return {
@@ -26,7 +20,7 @@ const orderReducer = (state = initialState, action: any) => {
       };
       return {
         ...state,
-        loading: false,
+        isLoading: false,
         orders: state.orders.concat(newOrder),
       };
     case ActionTypes.SUBMIT_ORDER_FAILURE:

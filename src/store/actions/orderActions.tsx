@@ -12,7 +12,7 @@ export const submitOrderStart = (
 ): Promise<void> => {
   dispatch({ type: ActionTypes.SUBMIT_ORDER_START });
   axios
-    .post('/orders', orderData)
+    .post('/orders.json', orderData)
     .then((response) =>
       dispatch({
         type: ActionTypes.SUBMIT_ORDER_SUCCESS,

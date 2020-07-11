@@ -34,7 +34,7 @@ const CheckoutSummary: React.FC<CheckoutSummary> = ({
 };
 
 const mapStateToProps = (state: StoreState) => ({
-  ingredients: state.ingredients,
+  ingredients: state.burgerBuilderState.ingredients,
 });
 
 export default connect(mapStateToProps)(CheckoutSummary);

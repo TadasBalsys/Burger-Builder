@@ -1,24 +1,38 @@
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, combineReducers } from 'redux';
 import thunk from 'redux-thunk';
-
 import { composeWithDevTools } from 'redux-devtools-extension';
-import BurgerBuilderReducer from './reducers/burgerBuilderReducer';
+
+import burgerBuilderReducer from './reducers/burgerBuilderReducer';
+import orderReducer from './reducers/orderReducer';
 
 import { Ingredients } from '../components/Burger/Burger';
+import { CustomerData } from '../containers/Checkout/ContactData/ContactData';
 
-// TODO: Thing again about this. createStore is Generic Function, where StoreState interface describes store state. Actions describes actions, but why there is two unknown???
-// const store = createStore(reducer);
-
-export interface StoreState {
+export interface BurgerBuilderState {
   ingredients: Ingredients;
   totalPrice: number;
   isFetchingData: boolean;
   hasIngredients: boolean;
-  fetchError: boolean
+  fetchError: boolean;
 }
 
+export interface OrderState {
+  orders: CustomerData[];
+  isLoading: boolean;
+}
+
+export interface StoreState {
+  burgerBuilderState: BurgerBuilderState;
+  orderState: OrderState;
+}
+
+const rootReducer = combineReducers({
+  burgerBuilderState: burgerBuilderReducer,
+  orderState: orderReducer,
+});
+
 const store = createStore(
-  BurgerBuilderReducer as any,
+  rootReducer,
   composeWithDevTools(applyMiddleware(thunk))
 );
 
