@@ -3,7 +3,11 @@ import { AnyAction } from 'redux';
 import axios from '../../axios-orders';
 import { ActionTypes } from './actionTypes';
 
-import { ContactDataState as OrderData } from '../../containers/Checkout/ContactData/ContactData';
+import { OrderData } from '../../containers/OrdersList/OrdersList';
+
+export const purchaseInit = () => ({
+  type: ActionTypes.PURCHASE_INIT,
+});
 
 export const submitOrderStart = (
   orderData: OrderData
@@ -22,6 +26,29 @@ export const submitOrderStart = (
     .catch((error) => dispatch({ type: ActionTypes.SUBMIT_ORDER_FAILURE }));
 };
 
-export const purchaseInit = () => ({
-  type: ActionTypes.PURCHASE_INIT,
-});
+export const fetchOrders = (): ThunkAction<
+  Promise<void>,
+  {},
+  {},
+  AnyAction
+> => async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
+  dispatch({ type: ActionTypes.FETCH_ORDERS_START });
+  axios
+    .get('/orders.json')
+    .then((res) => {
+      const fetchedOrders: OrderData[] = [];
+      for (const key in res.data) {
+        fetchedOrders.push({
+          id: key,
+          ...res.data[key],
+        });
+      }
+      dispatch({
+        type: ActionTypes.FETCH_ORDERS_SUCCESS,
+        payload: fetchedOrders,
+      });
+    })
+    .catch((error) => {
+      dispatch({ type: ActionTypes.FETCH_ORDERS_FAILURE });
+    });
+};

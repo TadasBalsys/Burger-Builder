@@ -1,62 +1,70 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { ThunkDispatch } from 'redux-thunk';
+
 import axios from '../../axios-orders';
 
 import Order from '../../components/Order/Order';
+import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
+import Spinner from '../../components/UI/Spinner/Spinner';
 
+import { fetchOrders } from '../../store/actions/orderActions';
+import { StoreState } from '../../store/store';
 import { CustomerData } from '../Checkout/ContactData/ContactData';
 import { Ingredients } from '../../components/Burger/Burger';
 
-interface OrdersListState {
-  orders: OrderData[] | undefined;
-  isLoading: boolean;
-}
-
-interface OrderData {
+export interface OrderData {
   ingredients: Ingredients;
   totalPrice: number;
   id: string;
   customer: CustomerData;
 }
 
-class OrdersList extends Component<{}, OrdersListState> {
-  state = {
-    orders: [],
-    isLoading: true,
-  };
+interface OwnProps {}
 
+interface StateProps {
+  ordersList: OrderData[];
+  isLoading: boolean;
+}
+
+interface DispatchProps {
+  fetchOrders: () => void;
+}
+
+type Props = OwnProps & StateProps & DispatchProps;
+
+class OrdersList extends Component<Props> {
   componentDidMount() {
-    axios
-      .get('/orders.json')
-      .then((res) => {
-        const fetchedOrders: OrderData[] = [];
-        for (const key in res.data) {
-          console.log(res.data[key]);
-          fetchedOrders.push({
-            id: key,
-            ...res.data[key],
-          });
-        }
-        this.setState(
-          () => ({ orders: fetchedOrders, isLoading: false }),
-          () => console.log(typeof this.state.orders)
-        );
-      })
-      .catch((error) => error);
+    this.props.fetchOrders();
   }
 
   render() {
-    return (
-      <div>
-        {this.state.orders.map((order: OrderData) => (
-          <Order
-            key={order.id}
-            totalPrice={order.totalPrice}
-            ingredients={order.ingredients}
-          />
-        ))}
-      </div>
-    );
+    let orders: JSX.Element | JSX.Element[] = <Spinner />;
+    if (!this.props.isLoading) {
+      orders = this.props.ordersList.map((order: OrderData) => (
+        <Order
+          key={order.id}
+          totalPrice={order.totalPrice}
+          ingredients={order.ingredients}
+        />
+      ));
+    }
+    return <div>{orders}</div>;
   }
 }
 
-export default OrdersList;
+const mapStateToProps = (state: StoreState) => ({
+  ordersList: state.orderState.ordersList,
+  isLoading: state.orderState.isLoading,
+});
+
+const mapDispatchToProps = (
+  dispatch: ThunkDispatch<{}, {}, any>
+): DispatchProps => ({
+  fetchOrders: () => dispatch(fetchOrders()),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withErrorHandler<Props>(OrdersList, axios));

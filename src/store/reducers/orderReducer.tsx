@@ -2,18 +2,20 @@ import { ActionTypes } from '../actions/actionTypes';
 import { OrderState } from '../store';
 
 const initialState: OrderState = {
-  orders: [],
+  order: [],
+  ordersList: [],
   isLoading: false,
   purchased: false,
 };
 
 const orderReducer = (state: OrderState = initialState, action: any) => {
-  switch (action.types) {
+  console.log(action);
+  switch (action.type) {
     case ActionTypes.PURCHASE_INIT:
       return {
         ...state,
         isLoading: true,
-        purchased: false
+        purchased: false,
       };
     case ActionTypes.SUBMIT_ORDER_START:
       return {
@@ -21,21 +23,33 @@ const orderReducer = (state: OrderState = initialState, action: any) => {
         isLoading: true,
       };
     case ActionTypes.SUBMIT_ORDER_SUCCESS:
-      const newOrder = {
-        ...action.payload.orderData,
-        id: action.payload.orderId,
-      };
       return {
         ...state,
         isLoading: false,
         purchased: true,
-        orders: state.orders.concat(newOrder),
       };
     case ActionTypes.SUBMIT_ORDER_FAILURE:
       return {
         ...state,
         isLoading: false,
-        purchased: false
+        purchased: false,
+      };
+    case ActionTypes.FETCH_ORDERS_START:
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case ActionTypes.FETCH_ORDERS_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        ordersList: action.payload,
+      };
+    case ActionTypes.FETCH_ORDERS_FAILURE:
+      return {
+        ...state,
+        isLoading: false,
+        // errorHandling (?)
       };
 
     default:

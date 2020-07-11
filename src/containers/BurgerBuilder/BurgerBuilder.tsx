@@ -30,7 +30,7 @@ interface DispatchProps {
   purchaseInit: () => void;
 }
 
-type BurgerBuilderProps = OwnProps & StateProps & DispatchProps;
+type Props = OwnProps & StateProps & DispatchProps;
 
 interface BurgerBuilderState {
   isPurchasable: boolean;
@@ -39,8 +39,8 @@ interface BurgerBuilderState {
   // error: boolean;
 }
 
-class BurgerBuilder extends Component<BurgerBuilderProps, BurgerBuilderState> {
-  constructor(props: BurgerBuilderProps) {
+class BurgerBuilder extends Component<Props, BurgerBuilderState> {
+  constructor(props: Props) {
     super(props);
     this.state = {
       isPurchasable: false,
@@ -152,4 +152,4 @@ const mapsDispatchToProps = (
 export default connect(
   mapStateToProps,
   mapsDispatchToProps
-)(withErrorHandler<BurgerBuilderProps>(BurgerBuilder, axios));
+)(withErrorHandler<Props>(BurgerBuilder, axios));
