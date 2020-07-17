@@ -1,60 +1,67 @@
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
-import { AnyAction } from 'redux';
+import { AnyAction, Action } from 'redux';
 
 import axios from '../../axios-orders';
 
 import { ActionTypes } from './actionTypes';
 import { Ingredients } from '../../components/Burger/Burger';
+import { StoreState } from '../store';
 
 export interface toggleIngAction {
   type: ActionTypes;
   payload: string;
 }
 
-//FIXME: ANY
-export interface SetData {
-  type: ActionTypes.SET_FETCHING_SUCCESS;
+export interface FetchDataStart
+  extends Action<typeof ActionTypes.FETCH_INGREDIENTS_START> {
+}
+
+export interface FetchDataSuccess
+  extends Action<typeof ActionTypes.FETCH_INGREDIENTS_SUCCESS> {
   payload: Ingredients;
 }
 
-export interface SetFetching {
-  type: ActionTypes.SET_FETCHING_START;
-  isFetching: boolean;
+export interface FetchDataFail
+  extends Action<typeof ActionTypes.FETCH_INGREDIENTS_FAILURE> {
 }
 
+type FetchDataActions = FetchDataStart | FetchDataSuccess | FetchDataFail;
+
 // Type Alias
-export type FetchingActions = SetData | SetFetching;
+// export type FetchingActions = SetData | SetFetching;
 
-export type Action = toggleIngAction | FetchingActions;
+// export type AllAction = toggleIngAction | FetchingActions;
+export type BurgerBuilderActions = toggleIngAction | FetchDataActions;
 
-export const addIngredient = (name: string) => ({
+export const addIngredient = (name: string): toggleIngAction => ({
   type: ActionTypes.ADD_INGREDIENT,
   payload: name,
 });
 
-export const removeIngredient = (name: string) => ({
+export const removeIngredient = (name: string): toggleIngAction => ({
   type: ActionTypes.REMOVE_INGREDIENT,
   payload: name,
 });
 
 export const fetchData = (): ThunkAction<
   Promise<void>,
-  {},
-  {},
-  AnyAction
+  StoreState,
+  undefined,
+  FetchDataActions
 > => async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
-  dispatch({ type: ActionTypes.SET_FETCHING_START });
+  dispatch({ type: ActionTypes.FETCH_INGREDIENTS_START });
   await axios
     .get('/ingredients.json')
-    .then((response) =>
+    .then((response) =>{
+      const data: Ingredients = response.data
       dispatch({
-        type: ActionTypes.SET_FETCHING_SUCCESS,
-        payload: response.data,
-      })
+        type: ActionTypes.FETCH_INGREDIENTS_SUCCESS,
+        payload: data,
+      })}
     )
     .catch((error) =>
       dispatch({
-        type: ActionTypes.SET_FETCHING_FAILURE,
+        type: ActionTypes.FETCH_INGREDIENTS_FAILURE,
       })
     );
 };

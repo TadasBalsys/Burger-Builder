@@ -1,12 +1,14 @@
-import React, { Dispatch } from 'react';
+import React from 'react';
+import { Dispatch } from 'redux'
 import { connect } from 'react-redux';
 
 import BuildControl from './BuildControl/BuildControl';
-import classes from './BuildControls.module.css';
-
-import { Action } from '../../../store/actions/burgerBuilderActions';
 
 import { addIngredient, removeIngredient } from '../../../store/actions';
+
+import { BurgerBuilderActions } from '../../../store/actions/burgerBuilderActions';
+
+import classes from './BuildControls.module.css';
 
 interface BuildControlProps {
   price: number;
@@ -76,7 +78,7 @@ const buildControls: React.FC<BuildControlProps> = (props): JSX.Element => {
   );
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<Action>) => {
+const mapDispatchToProps = (dispatch: Dispatch<BurgerBuilderActions>) => {
   return {
     onIngrAdd: (ingrName: string) => dispatch(addIngredient(ingrName)),
     onIngrRemove: (ingrName: string) => dispatch(removeIngredient(ingrName)),

@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { ThunkDispatch } from 'redux-thunk';
 
 import Button from '../../../components/UI/Button/Button';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
 import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
+
 import { Ingredients } from '../../../components/Burger/Burger';
 import { StoreState } from '../../../store/store';
+import { OrderData } from '../../OrdersList/OrdersList';
 
-import { ThunkDispatch } from 'redux-thunk';
 import { submitOrderStart } from '../../../store/actions/orderActions';
 import axios from '../../../axios-orders';
 import classes from './ContactData.module.css';
@@ -23,10 +25,12 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  submitOrder: (orderData: any) => void;
+  submitOrder: (orderData: InputData) => void;
 }
 
 type Props = OwnProps & StateProps & DispatchProps;
+
+// Component State
 
 export interface CustomerData {
   name: string;
@@ -41,6 +45,10 @@ export interface ContactDataState extends CustomerData {
   orderForm: OrderForms;
 }
 
+type InputData = Omit<OrderData, 'id'>
+
+// Input Types
+
 interface OrderForms {
   name: InputTypeInput;
   email: InputTypeInput;
@@ -49,7 +57,6 @@ interface OrderForms {
   deliveryMethod: InputTypeSelect;
 }
 
-// Input Types
 interface Input {
   elementType: string;
   isValid: boolean;
@@ -171,7 +178,7 @@ class ContactData extends Component<Props, ContactDataState> {
     event.preventDefault();
     const { name, email, street, zipCode, deliveryMethod } = this.state;
     const { ingredients, totalPrice } = this.props;
-    const order = {
+    const order: InputData = {
       ingredients,
       totalPrice,
       customer: {

@@ -1,6 +1,7 @@
 import { ActionTypes } from '../actions/actionTypes';
 import { Ingredients } from '../../components/Burger/Burger';
 import { BurgerBuilderState } from '../store';
+import { BurgerBuilderActions } from '../actions/burgerBuilderActions';
 
 //TODO: isFetchingData boolean variable are not used in the app. Remove it?
 const initialState: BurgerBuilderState = {
@@ -18,10 +19,9 @@ const IngredientsPrices: Ingredients = {
   bacon: 0.7,
 };
 
-// FIXME: action: any. Change to Action
 const burgerBuilderReducer = (
   state: BurgerBuilderState = initialState,
-  action: any
+  action: BurgerBuilderActions
 ): BurgerBuilderState => {
   switch (action.type) {
     case ActionTypes.ADD_INGREDIENT:
@@ -42,23 +42,23 @@ const burgerBuilderReducer = (
         },
         totalPrice: state.totalPrice - IngredientsPrices[action.payload],
       };
-    case ActionTypes.SET_FETCHING_START:
+    case ActionTypes.FETCH_INGREDIENTS_START:
       return {
         ...state,
         isFetchingData: true,
         hasIngredients: false,
         fetchError: false,
       };
-    case ActionTypes.SET_FETCHING_SUCCESS:
+    case ActionTypes.FETCH_INGREDIENTS_SUCCESS:
       return {
         ...state,
-        ingredients: action.payload,
+        ingredients: action.payload as Ingredients,
         totalPrice: 0,
         isFetchingData: false,
         hasIngredients: true,
         fetchError: false,
       };
-    case ActionTypes.SET_FETCHING_FAILURE:
+    case ActionTypes.FETCH_INGREDIENTS_FAILURE:
       return {
         ...state,
         isFetchingData: false,

@@ -9,7 +9,6 @@ const initialState: OrderState = {
 };
 
 const orderReducer = (state: OrderState = initialState, action: any) => {
-  console.log(action);
   switch (action.type) {
     case ActionTypes.PURCHASE_INIT:
       return {

@@ -25,10 +25,10 @@ export interface OrderState {
   purchased: boolean;
 }
 
-export interface StoreState {
-  burgerBuilderState: BurgerBuilderState;
-  orderState: OrderState;
-}
+// export interface StoreState {
+//   burgerBuilderState: BurgerBuilderState;
+//   orderState: OrderState;
+// }
 
 // const middlewares = [thunk];
 
@@ -36,6 +36,12 @@ const rootReducer = combineReducers({
   burgerBuilderState: burgerBuilderReducer,
   orderState: orderReducer,
 });
+
+/*
+  ReturnType automatically gets types of rootReducer, a.k.a describes state types.
+  NOTE! Must remove StoreState in combineReducer<StoreState> to ReturnType to work
+  */
+export type StoreState = ReturnType<typeof rootReducer>;
 
 // if (process.env.NODE_ENV === 'development') {
 //   middlewares.push(logger);
