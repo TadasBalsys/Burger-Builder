@@ -6,12 +6,12 @@ import Backdrop from '../../UI/Backdrop/Backdrop';
 
 import classes from './SideDrawer.module.css';
 
-interface SideDrawerProps {
+interface Props {
   show: boolean;
   closeHandler: (e: React.MouseEvent) => void;
 }
 
-const SideDrawer: React.FC<SideDrawerProps> = ({ show, closeHandler }) => {
+const SideDrawer: React.FC<Props> = ({ show, closeHandler }) => {
   let attachedClasses: string = [classes.SideDrawer, classes.Close].join(' ');
   if (show) {
     attachedClasses = [classes.SideDrawer, classes.Open].join(' ');

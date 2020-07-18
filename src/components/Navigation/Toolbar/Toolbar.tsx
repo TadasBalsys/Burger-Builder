@@ -6,11 +6,11 @@ import MenuIcon from '../MenuIcon/MenuIcon';
 
 import classes from './Toolbar.module.css';
 
-interface ToolbarProps {
+interface Props {
   toggleHandler: (e: React.MouseEvent) => void;
 }
 
-const Toolbar: React.FC<ToolbarProps> = ({ toggleHandler }) => (
+const Toolbar: React.FC<Props> = ({ toggleHandler }) => (
   <header className={classes.Toolbar}>
     <MenuIcon toggleHandler={toggleHandler} />
     <div className={classes.Logo}>

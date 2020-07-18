@@ -8,7 +8,10 @@ import Order from '../../components/Order/Order';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import Spinner from '../../components/UI/Spinner/Spinner';
 
-import { fetchOrders } from '../../store/actions/orderActions';
+import {
+  fetchOrders,
+  FetchOrdersActions,
+} from '../../store/actions/orderActions';
 import { StoreState } from '../../store/store';
 import { CustomerData } from '../Checkout/ContactData/ContactData';
 import { Ingredients } from '../../components/Burger/Burger';
@@ -19,6 +22,8 @@ export interface OrderData {
   id: string;
   customer: CustomerData;
 }
+
+//  Component Props
 
 interface OwnProps {}
 
@@ -59,7 +64,7 @@ const mapStateToProps = (state: StoreState) => ({
 });
 
 const mapDispatchToProps = (
-  dispatch: ThunkDispatch<{}, {}, any>
+  dispatch: ThunkDispatch<StoreState, undefined, FetchOrdersActions>
 ): DispatchProps => ({
   fetchOrders: () => dispatch(fetchOrders()),
 });

@@ -4,23 +4,23 @@ import Backdrop from '../Backdrop/Backdrop';
 
 import classes from './Modal.module.css';
 
-interface ModalProps {
+interface Props {
   children: ReactNode | string;
   closeModalHandler: (e: React.MouseEvent) => void | undefined;
   show: boolean;
 }
 
-const modal: React.FC<ModalProps> = (props) => (
+const modal: React.FC<Props> = ({show, closeModalHandler, children}) => (
   <>
-    <Backdrop show={props.show} closeHandler={props.closeModalHandler} />
+    <Backdrop show={show} closeHandler={closeModalHandler} />
     <div
       className={classes.Modal}
       style={{
-        transform: props.show ? 'translateY(0)' : 'translateY(-100vh)',
-        opacity: props.show ? '1' : '0',
+        transform: show ? 'translateY(0)' : 'translateY(-100vh)',
+        opacity: show ? '1' : '0',
       }}
     >
-      {props.children}
+      {children}
     </div>
   </>
 );

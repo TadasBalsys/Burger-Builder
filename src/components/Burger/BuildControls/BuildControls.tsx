@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dispatch } from 'redux'
+import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 
 import BuildControl from './BuildControl/BuildControl';
@@ -10,14 +10,21 @@ import { BurgerBuilderActions } from '../../../store/actions/burgerBuilderAction
 
 import classes from './BuildControls.module.css';
 
-interface BuildControlProps {
+// Components Props
+
+interface OwnProps {
   price: number;
   disableInfo: { [x: string]: boolean };
   isPurchasable: boolean;
-  onIngrAdd: (ingrName: string) => void;
-  onIngrRemove: (ingrName: string) => void;
   purchaseHandler: (e: React.MouseEvent) => void;
 }
+
+interface DispatchProps {
+  onIngrAdd: (ingrName: string) => void;
+  onIngrRemove: (ingrName: string) => void;
+}
+
+type Props = OwnProps & DispatchProps;
 
 interface isIngredientDisable {
   salad: boolean;
@@ -26,10 +33,10 @@ interface isIngredientDisable {
   bacon: boolean;
 }
 
-type control = {
+interface control {
   label: string;
   type: string;
-};
+}
 
 const controls: control[] = [
   { label: 'Salad', type: 'salad' },
@@ -38,7 +45,7 @@ const controls: control[] = [
   { label: 'Meat', type: 'meat' },
 ];
 
-const buildControls: React.FC<BuildControlProps> = (props): JSX.Element => {
+const buildControls: React.FC<Props> = (props): JSX.Element => {
   const {
     price,
     isPurchasable,

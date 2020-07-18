@@ -1,6 +1,7 @@
 import React from 'react';
 
 import NavItem from '../NavItem/NavItem';
+
 import classes from './NavItemsList.module.css';
 
 const navItemsList = () => (

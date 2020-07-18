@@ -1,18 +1,27 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import Burger, { BurgerProps } from '../../Burger/Burger';
+import Burger, { Props as BurgerProps, Ingredients } from '../../Burger/Burger';
 import Button from '../../UI/Button/Button';
 
-import classes from './CheckoutSummary.module.css';
 import { StoreState } from '../../../store/store';
 
-interface CheckoutSummary extends BurgerProps {
+import classes from './CheckoutSummary.module.css';
+
+//  Component Props
+
+interface OwnProps extends BurgerProps {
   checkoutCancel: (e: React.MouseEvent) => void;
   checkoutContinue: (e: React.MouseEvent) => void;
 }
 
-const CheckoutSummary: React.FC<CheckoutSummary> = ({
+interface StateProps {
+  ingredients: Ingredients;
+}
+
+type Props = OwnProps & StateProps;
+
+const CheckoutSummary: React.FC<Props> = ({
   ingredients,
   checkoutCancel,
   checkoutContinue,

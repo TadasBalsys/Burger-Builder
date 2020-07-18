@@ -1,5 +1,5 @@
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
-import { AnyAction, Action } from 'redux';
+import { Action } from 'redux';
 
 import axios from '../../axios-orders';
 
@@ -7,25 +7,26 @@ import { ActionTypes } from './actionTypes';
 import { Ingredients } from '../../components/Burger/Burger';
 import { StoreState } from '../store';
 
-export interface toggleIngAction {
+interface toggleIngAction {
   type: ActionTypes;
   payload: string;
 }
 
-export interface FetchDataStart
-  extends Action<typeof ActionTypes.FETCH_INGREDIENTS_START> {
-}
+interface FetchDataStart
+  extends Action<typeof ActionTypes.FETCH_INGREDIENTS_START> {}
 
-export interface FetchDataSuccess
+interface FetchDataSuccess
   extends Action<typeof ActionTypes.FETCH_INGREDIENTS_SUCCESS> {
   payload: Ingredients;
 }
 
-export interface FetchDataFail
-  extends Action<typeof ActionTypes.FETCH_INGREDIENTS_FAILURE> {
-}
+interface FetchDataFail
+  extends Action<typeof ActionTypes.FETCH_INGREDIENTS_FAILURE> {}
 
-type FetchDataActions = FetchDataStart | FetchDataSuccess | FetchDataFail;
+export type FetchDataActions =
+  | FetchDataStart
+  | FetchDataSuccess
+  | FetchDataFail;
 
 // Type Alias
 // export type FetchingActions = SetData | SetFetching;
@@ -48,17 +49,19 @@ export const fetchData = (): ThunkAction<
   StoreState,
   undefined,
   FetchDataActions
-> => async (dispatch: ThunkDispatch<{}, {}, AnyAction>): Promise<void> => {
+> => async (
+  dispatch: ThunkDispatch<StoreState, undefined, FetchDataActions>
+): Promise<void> => {
   dispatch({ type: ActionTypes.FETCH_INGREDIENTS_START });
   await axios
     .get('/ingredients.json')
-    .then((response) =>{
-      const data: Ingredients = response.data
+    .then((response) => {
+      const data: Ingredients = response.data;
       dispatch({
         type: ActionTypes.FETCH_INGREDIENTS_SUCCESS,
         payload: data,
-      })}
-    )
+      });
+    })
     .catch((error) =>
       dispatch({
         type: ActionTypes.FETCH_INGREDIENTS_FAILURE,

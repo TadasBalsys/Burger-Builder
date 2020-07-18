@@ -4,15 +4,15 @@ import BurgerIngredient from './BurgerIngredient/BurgerIngredient';
 
 import classes from './Burger.module.css';
 
-export interface BurgerProps {
+export interface Props {
   ingredients: Ingredients;
 }
 
 export interface Ingredients {
-  [key: string] : number
+  [key: string]: number;
 }
 
-const Burger: React.FC<BurgerProps> = ({ ingredients }): JSX.Element => {
+const Burger: React.FC<Props> = ({ ingredients }): JSX.Element => {
   const ingredientsNames: string[] = Object.keys(ingredients);
   /*
   Maps thru ingredientsNames array, and gets value from ingredients obj by mapped value (ingredient: string),

@@ -1,4 +1,10 @@
 import { ActionTypes } from '../actions/actionTypes';
+import {
+  PurchaseInitAction,
+  SubmitOrderActions,
+  FetchOrdersActions,
+} from '../actions/orderActions';
+import { OrderData } from '../../containers/OrdersList/OrdersList';
 import { OrderState } from '../store';
 
 const initialState: OrderState = {
@@ -8,7 +14,10 @@ const initialState: OrderState = {
   purchased: false,
 };
 
-const orderReducer = (state: OrderState = initialState, action: any) => {
+const orderReducer = (
+  state: OrderState = initialState,
+  action: PurchaseInitAction | SubmitOrderActions | FetchOrdersActions
+) => {
   switch (action.type) {
     case ActionTypes.PURCHASE_INIT:
       return {
@@ -42,7 +51,7 @@ const orderReducer = (state: OrderState = initialState, action: any) => {
       return {
         ...state,
         isLoading: false,
-        ordersList: action.payload,
+        ordersList: action.payload as OrderData[],
       };
     case ActionTypes.FETCH_ORDERS_FAILURE:
       return {

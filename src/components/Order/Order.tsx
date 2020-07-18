@@ -1,15 +1,15 @@
 import React from 'react';
 
-import classes from './Order.module.css';
-
 import { Ingredients } from '../Burger/Burger';
 
-interface OrderProps {
+import classes from './Order.module.css';
+
+interface Props {
   ingredients: Ingredients;
   totalPrice: number;
 }
 
-const Order: React.FC<OrderProps> = ({ totalPrice, ingredients }) => {
+const Order: React.FC<Props> = ({ totalPrice, ingredients }) => {
   const ingredientsArr = [];
   for (const ingredientName in ingredients) {
     ingredientsArr.push({

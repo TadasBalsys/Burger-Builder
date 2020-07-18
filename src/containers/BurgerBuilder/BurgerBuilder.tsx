@@ -13,8 +13,16 @@ import Spinner from '../../components/UI/Spinner/Spinner';
 import axios from '../../axios-orders';
 
 import { StoreState } from '../../store/store';
-import { fetchData } from '../../store/actions/burgerBuilderActions';
-import { purchaseInit } from '../../store/actions/orderActions';
+import {
+  fetchData,
+  FetchDataActions,
+} from '../../store/actions/burgerBuilderActions';
+import {
+  purchaseInit,
+  PurchaseInitAction,
+} from '../../store/actions/orderActions';
+
+//  Component Props
 
 interface OwnProps extends RouteComponentProps {}
 
@@ -31,6 +39,8 @@ interface DispatchProps {
 }
 
 type Props = OwnProps & StateProps & DispatchProps;
+
+// Component State
 
 interface BurgerBuilderState {
   isPurchasable: boolean;
@@ -59,12 +69,8 @@ class BurgerBuilder extends Component<Props, BurgerBuilderState> {
       ...this.props.ingredients,
     };
     const sum = Object.keys(ingredients)
-      .map((ingredient) => {
-        return ingredients[ingredient as keyof Ingredients];
-      })
-      .reduce((sum, el) => {
-        return sum + el;
-      }, 0);
+      .map((ingredient) => ingredients[ingredient as keyof Ingredients])
+      .reduce((sum, el) => sum + el, 0);
     return sum > 0;
   };
 
@@ -142,8 +148,12 @@ const mapStateToProps = (state: StoreState): StateProps => ({
   fetchError: state.burgerBuilderState.fetchError,
 });
 
-const mapsDispatchToProps = (
-  dispatch: ThunkDispatch<{}, {}, any>
+const mapDispatchToProps = (
+  dispatch: ThunkDispatch<
+    StoreState,
+    undefined,
+    FetchDataActions | PurchaseInitAction
+  >
 ): DispatchProps => ({
   fetchIngredients: () => dispatch(fetchData()),
   purchaseInit: () => dispatch(purchaseInit()),
@@ -151,5 +161,5 @@ const mapsDispatchToProps = (
 
 export default connect(
   mapStateToProps,
-  mapsDispatchToProps
+  mapDispatchToProps
 )(withErrorHandler<Props>(BurgerBuilder, axios));

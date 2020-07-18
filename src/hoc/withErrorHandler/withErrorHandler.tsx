@@ -1,17 +1,18 @@
 import React, { Component } from 'react';
 
 import Modal from '../../components/UI/Modal/Modal';
+
 import { AxiosInstance } from 'axios';
 
-interface wEHState {
+interface State {
   errorMessage: string;
 }
 
-const withErrorHandler = <P extends {}>(
-  WrappedComponent: React.ComponentType<P>,
+const withErrorHandler = <Props extends {}>(
+  WrappedComponent: React.ComponentType<Props>,
   axios: AxiosInstance
 ) => {
-  return class extends Component<P, wEHState> {
+  return class extends Component<Props, State> {
     reqInterceptor!: number;
     resInterceptor!: number;
 

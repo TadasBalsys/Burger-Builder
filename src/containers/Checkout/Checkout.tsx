@@ -17,7 +17,6 @@ type Props = OwnProps & StateProps;
 
 // TODO: Refactor to Function component (?)
 class Checkout extends Component<Props> {
-  //TODO: When order is canceled and app goBack to previous page, the totalPrice is not reset
   checkoutCancelHandler = () => this.props.history.goBack();
 
   checkoutContinueHandler = () =>

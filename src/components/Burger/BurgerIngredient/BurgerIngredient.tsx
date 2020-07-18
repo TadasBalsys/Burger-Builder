@@ -2,12 +2,12 @@ import React from 'react';
 
 import classes from './BurgerBuilder.module.css';
 
-interface BurgerProps {
+interface Props {
   type: string;
 }
 
-const burgerIngredient: React.FC<BurgerProps> = (props) => {
-  switch (props.type) {
+const burgerIngredient: React.FC<Props> = ({ type }) => {
+  switch (type) {
     case 'bread-bottom':
       return <div className={classes.BreadBottom}> </div>;
     case 'bread-top':
@@ -25,7 +25,6 @@ const burgerIngredient: React.FC<BurgerProps> = (props) => {
       return <div className={classes.Bacon}></div>;
     case 'salad':
       return <div className={classes.Salad}></div>;
-
     default:
       return null;
   }

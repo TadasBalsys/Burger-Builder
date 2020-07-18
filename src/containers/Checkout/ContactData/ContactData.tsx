@@ -8,15 +8,21 @@ import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
 import withErrorHandler from '../../../hoc/withErrorHandler/withErrorHandler';
 
+import axios from '../../../axios-orders';
+
 import { Ingredients } from '../../../components/Burger/Burger';
 import { StoreState } from '../../../store/store';
-import { OrderData } from '../../OrdersList/OrdersList';
 
-import { submitOrderStart } from '../../../store/actions/orderActions';
-import axios from '../../../axios-orders';
+import {
+  submitOrderStart,
+  SubmitOrderActions,
+  InputsData,
+} from '../../../store/actions/orderActions';
+
 import classes from './ContactData.module.css';
 
 // Component Props
+
 interface OwnProps extends RouteComponentProps {}
 
 interface StateProps {
@@ -25,7 +31,7 @@ interface StateProps {
 }
 
 interface DispatchProps {
-  submitOrder: (orderData: InputData) => void;
+  submitOrder: (orderData: InputsData) => void;
 }
 
 type Props = OwnProps & StateProps & DispatchProps;
@@ -40,12 +46,10 @@ export interface CustomerData {
   deliveryMethod: string;
 }
 
-export interface ContactDataState extends CustomerData {
+interface ContactDataState extends CustomerData {
   isLoading: boolean;
   orderForm: OrderForms;
 }
-
-type InputData = Omit<OrderData, 'id'>
 
 // Input Types
 
@@ -177,8 +181,12 @@ class ContactData extends Component<Props, ContactDataState> {
   orderHandler = (event: React.FormEvent) => {
     event.preventDefault();
     const { name, email, street, zipCode, deliveryMethod } = this.state;
+    /* 
+     TODO: Now if user write something in the input and than deletes it, the input html elem are not receiving css class Invalid and user can submit order with empty values. 
+    Need to implement method to check (value) => value !== ""
+    */
     const { ingredients, totalPrice } = this.props;
-    const order: InputData = {
+    const order: InputsData = {
       ingredients,
       totalPrice,
       customer: {
@@ -189,13 +197,12 @@ class ContactData extends Component<Props, ContactDataState> {
         deliveryMethod,
       },
     };
-    // TODO: Added isLoading logic handler - show spinner when connect to database is progress
     this.props.submitOrder(order);
     // "Redirects" back to main page
     this.props.history.push('/');
   };
 
-  // Type Checker || Type Guard
+  // Type Checker a.k.a Type Guard
   hasMinLengthProp = (
     input: InputTypeInput | InputTypeSelect
   ): input is InputTypeInput =>
@@ -215,7 +222,6 @@ class ContactData extends Component<Props, ContactDataState> {
           value.length >= minLength && value.length <= maxLength && isValid;
       }
     }
-
     return isValid;
   };
 
@@ -224,7 +230,7 @@ class ContactData extends Component<Props, ContactDataState> {
     inputIdentifier: string
   ) => {
     const inputValue: string | number = event.target.value;
-    let hasTouched: boolean = inputValue.length ? true : false;
+    let hasTouched: boolean = true;
 
     const key = this.state.orderForm[inputIdentifier as keyof CustomerData];
     const isValid = this.checkValidity(inputValue, key);
@@ -236,7 +242,7 @@ class ContactData extends Component<Props, ContactDataState> {
         ...prevState.orderForm,
         [inputIdentifier]: {
           ...prevState.orderForm[inputIdentifier as keyof OrderForms],
-          isValid: isValid,
+          isValid,
           hasTouched,
         },
       },
@@ -269,7 +275,7 @@ class ContactData extends Component<Props, ContactDataState> {
               elementType={elementType}
               elementConfig={elementConfig}
               validation={validation.required}
-              invalid={isValid}
+              invalid={!isValid}
               hasTouched={hasTouched}
               changeHandler={(event) =>
                 this.inputChangeHandler(event, input.id)
@@ -301,8 +307,10 @@ const mapStateToProps = (state: StoreState) => ({
   totalPrice: state.burgerBuilderState.totalPrice,
 });
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<{}, {}, any>) => ({
-  submitOrder: (orderData: any) => dispatch(submitOrderStart(orderData)),
+const mapDispatchToProps = (
+  dispatch: ThunkDispatch<StoreState, undefined, SubmitOrderActions>
+) => ({
+  submitOrder: (orderData: InputsData) => dispatch(submitOrderStart(orderData)),
 });
 
 export default connect(

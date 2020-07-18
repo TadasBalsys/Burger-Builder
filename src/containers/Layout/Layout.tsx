@@ -5,15 +5,15 @@ import SideDrawer from '../../components/Navigation/SideDrawer/SideDrawer';
 
 import classes from './Layout.module.css';
 
-interface LayoutProps {
+interface Props {
   children: JSX.Element;
 }
 
-interface LayoutState {
+interface State {
   isDrawerVisible: boolean;
 }
 
-class Layout extends Component<LayoutProps, LayoutState> {
+class Layout extends Component<Props, State> {
   state = {
     isDrawerVisible: false,
   };
